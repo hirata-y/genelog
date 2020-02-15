@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css?family=Sawarabi+Gothic&display=swap");
+.container-fluid {
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/*---メニューの仕様------------------------------*/
+.menu_item{
+  border-radius: 20px;
+  background-color: rgba(229, 163, 35, 0.5);
+  padding: 5%;
+}
+
+.menu_item .menu_name{
+  display: none;
+}
+
+.menu_item .logo{
+  font-size: 2.5rem;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.menu_item:hover{
+  -webkit-transition: all 0.3s linear 0s;
+  background-color: rgba(229, 163, 35, 0.8);
+}
+
+.menu_item:hover .menu_name{
+  display: block;
+  color: rgba(0, 104, 136, 1);
+  font-size: 1.3rem;
+}
+
+.menu_item:hover .logo{
+  color: rgba(0, 136, 90, 1);
+  font-size: 2rem;
+}
+
+/*---menu_topの仕様------------------------------*/
+.menu_top{
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+}
+
+.app_name{
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: 'Sawarabi Gothic', sans-serif;
+  color: rgba(229, 163, 35, 1);
+}
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: 'Sawarabi Gothic', sans-serif;
+  color: rgba(229, 163, 35, 1);
+}
+
+.search_text{
+  font-size: 1.6rem;
+  color: rgba(0, 0, 0, 1);
+}
+
+/*---お気に入りボタンの仕様------------------------------*/
+.art_logo{
+  color: rgba(98, 96, 99,1);
+  font-size: 1.8rem;
+}
+
+.art_logo:hover{
+  color: rgba(0, 136, 90, 1);
+}
+
+.fav_logo{
+  color: rgba(252,200,0,1);
+  font-size: 1.8rem;
+}
+
+.fav_logo:hover{
+  color: rgba(0, 136, 90, 1);
+}
+
+/*---メインコンテンツの仕様------------------------------*/
+.main {
+  z-index: 1;
+  padding: 2%;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.8);
+}
+
+.main_title{
+  font-weight: bold;
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.mb-a{
+  margin-bottom: 500px;
+}
+
+.pb-a{
+  padding-bottom: 500px;
+}
+
+.con_text{
+  color: rgba(0, 0, 0, 1);
+  font-size: 1.6rem;
+}
+
+.select_design input[type="radio"]{
+  display: none;
+}
+
+.file_post input[type="text"]{
+  display: none;
+}
+
+.disc{
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+.size_img{
+  max-width: 100%;
+  height: auto;
+}
+
+/*---articleの仕様------------------------------*/
+.white{
+  background-color: rgba(255,255,255,0.8);
+}
+
+.black{
+  background-color: rgba(0,0,0,0.7);
+}
+
+.black .disc,
+.black .article_title,
+.black .article_text,
+.black .article_term{
+  color: rgba(255,255,255,1);
+}
+
+.black .note{
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.blue{
+  background-color: rgba(0, 175, 204, 0.8);
+}
+
+.blue .note{
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.pink{
+  background-color: rgba(235,110,160,0.8);
+}
+
+.green{
+  background-color: rgba(121, 192, 110, 0.8);
+}
+
+.green .note{
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.article_title{
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.article_text{
+  font-size: 1.2rem;
+}
+
+.article_term{
+  font-size: 1.4rem;
+}
+
+.note{
+  background-color: rgba(0, 136, 90, 0.2);
+  border-radius: 10%;
+}
+
