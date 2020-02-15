@@ -141,12 +141,14 @@
                   <div class="offset-1 my-2 disc">
                       タイトル
                   </div>
-                  <div class="mb-4">
+                  <div class="col-8 mb-4">
                       <input type="text" class="form-control-lg" name="title" size="50" value="<%=list.get(0).get("title")%>" required>
                   </div>
 
                   <div class="row my-4">
-                      <img class="col-6 mx-2" src="../images/sample.jpg">
+                      <div class="col-6 mx-2">
+                        <img class="size_img" src="../images/sample.jpg">
+                      </div>
                       <textarea class="col-5 mx-2" name="text" rows="5" value="<%=list.get(0).get("text")%>"></textarea>
                   </div>
 

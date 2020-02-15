@@ -147,8 +147,10 @@
                   <%=list.get(0).get("title")%>
               </div>
 
-              <div class="row my-3">
-                  <img class="col-6 mx-2" src="../image/<%=article_noStr%>.jpg">
+              <div class="row my-4">
+                  <div class="col-6 mx-2">
+                      <img class="size_img" src="../image/<%=article_noStr%>.jpg">
+                  </div>
                   <div class="col-5 mx-2 article_text">
                       <%=list.get(0).get("text")%>
                   </div>
@@ -169,11 +171,11 @@
           </div>
       </div>
 
-      <div class="row">
-        <div class="offset-10 mt-4 mb-5">
-          <a class="btn btn-primary mb-2" href="../home.jsp" role="button">ホーム画面</a>
+        <div class="row">
+            <div class="offset-10 my-5">
+                <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面へ</a>
+            </div>
         </div>
-      </div>
 
     </div>
     <script type="text/javascript" src="../js/bootstrap.bundle.js"></script>
