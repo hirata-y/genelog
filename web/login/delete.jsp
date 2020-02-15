@@ -4,47 +4,28 @@
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 
-	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
-	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
-	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	//削除件数
 	int del_count = 0;
-
-  try{	// ロードに失敗したときのための例外処理
-		// JDBCドライバのロード
+  try{
 		Class.forName(DRIVER).newInstance();
-
-		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
-
-		//Statementオブジェクトの作成
 		stmt = con.createStatement();
 
-  	    //SQLステートメントの作成（選択クエリ）
   	    SQL = new StringBuffer();
-
   	    SQL.append("delete from user_tbl where user_name = 'suzuki'");
-
 		del_count = stmt.executeUpdate(SQL.toString());
-
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
@@ -60,7 +41,6 @@
 	}
 
 	finally{
-		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();
