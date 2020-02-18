@@ -6,51 +6,31 @@
 
 	String article_noStr[]  = request.getParameterValues("article_no");
 
-	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
-	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
-	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	//削除件数
 	int del_count = 0;
 
-  try{	// ロードに失敗したときのための例外処理
-		// JDBCドライバのロード
+  try{
 		Class.forName(DRIVER).newInstance();
-
-		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
-
-		//Statementオブジェクトの作成
 		stmt = con.createStatement();
-
-        //SQLステートメントの作成（選択クエリ）
         SQL = new StringBuffer();
 
-        //SQL文の構築（DB複数削除）
         for(int i = 0; i < article_noStr.length; i++){
-          //SQLステートメントの作成（選択クエリ）
           SQL = new StringBuffer();
-          //delete実行
           SQL.append("delete from article_tbl where article_no = ");
           SQL.append(article_noStr[i]);
-
           del_count = stmt.executeUpdate(SQL.toString());
         }
 
@@ -69,7 +49,6 @@
 	}
 
 	finally{
-		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();

@@ -8,65 +8,40 @@
 
 	String user_noStr = (String) session.getAttribute("user_no");
 
-	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
-	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
-	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	//ヒットフラグ
 	int hit_flag = 0;
 
-	//HashMap（1件分のデータを格納する連想配列）
 	HashMap<String,String> map = null;
-
-	//ArrayList（すべての件数を格納する配列）
 	ArrayList<HashMap> list = null;
 	list = new ArrayList<HashMap>();
 
-  try{	// ロードに失敗したときのための例外処理
-		// JDBCドライバのロード
+  try{
 		Class.forName(DRIVER).newInstance();
-
-		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
-
-		//Statementオブジェクトの作成
 		stmt = con.createStatement();
 
-  		//SQLステートメントの作成（選択クエリ）
   		SQL = new StringBuffer();
-
-		//SQL文の発行（選択クエリ）
 		SQL.append("select * from article_tbl where user_no = '");
 		SQL.append(user_noStr);
 		SQL.append("'");
-
-		//SQL文の発行（選択クエリ）
 		rs = stmt.executeQuery(SQL.toString());
 
-		//入力したデータがデータベースに存在するか調べる
     	while(rs.next()){
-    	  //検索データをHashMapへ格納する
     	  map = new HashMap<String,String>();
     	  map.put("article_no",rs.getString("article_no"));
     	  map.put("title",rs.getString("title"));
-    	  //1件分のデータ(HashMap)をArrayListへ追加
     	  list.add(map);
     	}
 
@@ -92,7 +67,6 @@
 	}
 
 	finally{
-		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();
