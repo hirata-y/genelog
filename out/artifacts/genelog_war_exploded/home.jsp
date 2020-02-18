@@ -191,7 +191,7 @@
                                     <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
                                 </div>
                                 <div class="col-2 text-center">
-                                    <a class="fav_logo" href="favorite/favorite_delete_confirm.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                    <a class="fav_logo" href="favorite/t_delete.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                                 </div>
                             </div>
                         <% fav_cnt = fav_cnt - 1; %>
@@ -201,7 +201,7 @@
                                     <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
                                 </div>
                                 <div class="col-2 text-center">
-                                    <a class="art_logo" href="favorite/favorite_confirm.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                    <a class="art_logo" href="favorite/t_favorite.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                                 </div>
                             </div>
                         <% } %>
@@ -214,7 +214,7 @@
                                 <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(i).get("article_no") %>"><%= list.get(i).get("title") %></a>
                             </div>
                             <div class="col-2 text-center">
-                                <a class="art_logo" href="favorite/favorite_confirm.jsp?article_no=<%= list.get(i).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                <a class="art_logo" href="favorite/t_favorite.jsp?article_no=<%= list.get(i).get("article_no") %>"><i class="fas fa-paw"></i></a>
                             </div>
                         </div>
                         <% } %>
