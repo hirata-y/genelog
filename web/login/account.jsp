@@ -93,9 +93,9 @@
       function testdata() {
         document.test.user_name.value = "suzuki";
         document.test.user_sex[0].checked = true;
-        document.test.user_birth.value = "2000-02-14";
+        document.test.user_birth.value = "2000-02-21";
         document.test.user_mail.value = "suzuki@gmail.com";
-        document.test.user_pass.value = "suzuki0214test";
+        document.test.user_pass.value = "suzuki0221test";
       }
     </script>
   </body>

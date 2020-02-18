@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
@@ -17,6 +19,11 @@
 
 	StringBuffer ERMSG = null;
 
+	HashMap<String,String> map = null;
+    ArrayList<HashMap> list = null;
+    list = new ArrayList<HashMap>();
+
+
 	int del_count = 0;
   try{
 		Class.forName(DRIVER).newInstance();
@@ -24,7 +31,32 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
+  	    SQL.append("select user_no from user_tbl where user_name = 'suzuki'");
+  	    rs = stmt.executeQuery(SQL.toString());
+
+  	    if (rs.next()){
+  	    	map = new HashMap<String,String>();
+            map.put("user_no",rs.getString("user_no"));
+            list.add(map);
+		}
+
+		SQL = new StringBuffer();
   	    SQL.append("delete from user_tbl where user_name = 'suzuki'");
+		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("delete from article_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
+		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("delete from favorite_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
+		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("delete from archive_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
 		del_count = stmt.executeUpdate(SQL.toString());
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){

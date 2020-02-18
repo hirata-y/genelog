@@ -70,7 +70,7 @@
                 タイトル
               </div>
               <div class="col-8 mb-4">
-                <input type="text" class="form-control-lg" name="title" size="50" placeholder="<%=titleStr%>" readonly>
+                <input type="text" class="form-control-lg" name="title" placeholder="<%=titleStr%>" readonly>
               </div>
 
               <div class="row my-4">

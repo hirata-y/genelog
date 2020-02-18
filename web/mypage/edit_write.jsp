@@ -142,7 +142,7 @@
                       タイトル
                   </div>
                   <div class="col-8 mb-4">
-                      <input type="text" class="form-control-lg" name="title" size="50" value="<%=list.get(0).get("title")%>" required>
+                      <input type="text" class="form-control-lg" name="title" value="<%=list.get(0).get("title")%>" required>
                   </div>
 
                   <div class="row my-4">

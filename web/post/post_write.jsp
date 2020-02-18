@@ -61,7 +61,7 @@
                       タイトル
                   </div>
                   <div class="col-8 mb-4">
-                      <input type="text" class="form-control-lg" name="title" size="50" placeholder="タイトル" required>
+                      <input type="text" class="form-control-lg" name="title" placeholder="タイトル" required>
                   </div>
 
                   <div class="row my-4">

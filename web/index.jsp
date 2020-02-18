@@ -61,11 +61,11 @@
         </div>
       </form>
 
-        <div class="row col-2 offset-8">
+        <div class="row col-4 offset-6">
             <a class="btn btn-primary mt-5 mb-a" href="login/account.jsp" role="button">新規会員登録</a>
         </div>
 
-       <div class="row col-2 offset-8">
+       <div class="row col-4 offset-6">
             <a class="btn btn-primary mt-5" href="login/delete.jsp" role="button">テストデータ削除</a>
         </div>
 

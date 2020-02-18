@@ -1,50 +1,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 
-	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
-	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
-	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	//削除件数
+	HashMap<String,String> map = null;
+    ArrayList<HashMap> list = null;
+    list = new ArrayList<HashMap>();
+
+
 	int del_count = 0;
-
-  try{	// ロードに失敗したときのための例外処理
-		// JDBCドライバのロード
+  try{
 		Class.forName(DRIVER).newInstance();
-
-		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
-
-		//Statementオブジェクトの作成
 		stmt = con.createStatement();
 
-  	    //SQLステートメントの作成（選択クエリ）
   	    SQL = new StringBuffer();
+  	    SQL.append("select user_no from user_tbl where user_name = 'suzuki'");
+  	    rs = stmt.executeQuery(SQL.toString());
 
+  	    if (rs.next()){
+  	    	map = new HashMap<String,String>();
+            map.put("user_no",rs.getString("user_no"));
+            list.add(map);
+		}
+
+		SQL = new StringBuffer();
   	    SQL.append("delete from user_tbl where user_name = 'suzuki'");
-
 		del_count = stmt.executeUpdate(SQL.toString());
-
+		SQL = new StringBuffer();
+  	    SQL.append("delete from article_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
+		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("delete from favorite_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
+		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("delete from archive_tbl where user_no = '");
+  	    SQL.append(list.get(0).get("user_no"));
+  	    SQL.append("'");
+		del_count = stmt.executeUpdate(SQL.toString());
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
@@ -60,7 +73,6 @@
 	}
 
 	finally{
-		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();
