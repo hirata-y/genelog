@@ -19,18 +19,12 @@
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
 	StringBuffer ERMSG = null;
 
-	//ヒットフラグ
 	int hit_flg = 0;
     int art_sum = 0; //listの記事件数に入れるの変数
-	int fav_sum = 0; //listのお気に入り件数を入れる変数
 	int art_cnt = 0; //for文内で使用するカウント変数
 	int fav_cnt = 0; //for文内で使用するカウント変数
 
@@ -227,6 +221,13 @@
                 <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
             </div>
         </div>
+
+        <div class="row">
+            <div class="offset-10 my-5">
+                <a class="btn btn-primary" href="post/t_design.jsp" role="button">ホーム画面へ</a>
+            </div>
+        </div>
+
 
 		<% }else if (hit_flg == 2) { %>
         <div class="row p-5">
