@@ -136,7 +136,7 @@
                     <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
                 </div>
                 <div class="offset-2">
-                    <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
+                    <a class="btn btn-outline-success" href="d_select.jsp">削除</a>
                 </div>
               </div>
 

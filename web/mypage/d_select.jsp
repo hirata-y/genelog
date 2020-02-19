@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 
-	String article_noStr[]  = request.getParameterValues("article_no");
+	String user_noStr = (String) session.getAttribute("user_no");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -19,20 +21,36 @@
 
 	StringBuffer ERMSG = null;
 
-	int del_count = 0;
+	int hit_flag = 0;
+
+	HashMap<String,String> map = null;
+	ArrayList<HashMap> list = null;
+	list = new ArrayList<HashMap>();
 
   try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
 		stmt = con.createStatement();
-        SQL = new StringBuffer();
 
-        for(int i = 0; i < article_noStr.length; i++){
-          SQL = new StringBuffer();
-          SQL.append("delete from article_tbl where article_no = ");
-          SQL.append(article_noStr[i]);
-          del_count = stmt.executeUpdate(SQL.toString());
-        }
+  		SQL = new StringBuffer();
+		SQL.append("select * from article_tbl where user_no = '");
+		SQL.append(user_noStr);
+		SQL.append("'");
+		rs = stmt.executeQuery(SQL.toString());
+
+    	while(rs.next()){
+    	  map = new HashMap<String,String>();
+    	  map.put("article_no",rs.getString("article_no"));
+    	  map.put("title",rs.getString("title"));
+    	  list.add(map);
+    	}
+
+    	if (list.size() > 0) {
+    	  hit_flag = 1;
+    	}
+    	else{
+    	  hit_flag = 0;
+    	}
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -71,7 +89,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>記事削除完了</title>
+    <title>削除記事選択</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/all.css">
@@ -99,7 +117,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      削除完了
+                      選択画面
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -111,34 +129,50 @@
             </div>
         </div>
 
-      <div class="offset-2 my-4">
-          <div class="main offset-1 col-10">
-              <div class="row my-4">
-                <div class="offset-4">
-                    <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
-                </div>
-                <div class="offset-2">
-                    <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
-                </div>
-              </div>
+		<div class="offset-2 my-4">
 
-            <% if(del_count == 0){ %>
-              <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">エラー</h4>
-                  <div class="disc">
-                    削除処理が失敗しました
-                  </div>
-              </div>
-            <% }else{ %>
-              <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">削除完了</h4>
-                  <div class="disc">
-                    <%= del_count %>件削除しました
-                  </div>
-              </div>
-            <% } %>
-          </div>
-      </div>
+			<div class="main col-10 offset-1">
+				<div class="row my-4">
+					<div class="offset-4">
+						<a class="btn btn-outline-success" href="e_select.jsp">編集</a>
+					</div>
+					<div class="offset-2">
+						<a class="btn btn-outline-success" href="d_select.jsp">削除</a>
+					</div>
+				</div>
+
+				<form action="d_done.jsp">
+					<% if(hit_flag == 1){ %>
+					  <div class="disc my-3">
+						  削除する記事を選択してください
+					  </div>
+					  <% for(int i = 0; i < list.size(); i++){ %>
+						  <div class="row my-3">
+							  <div class="offset-1 custom-control custom-checkbox">
+								  <input type="checkbox" class="custom-control-input" id="customCheck<%= i %>" name="article_no" value="<%= list.get(i).get("article_no") %>">
+								  <label class="custom-control-label disc" for="customCheck<%= i %>"><%= list.get(i).get("title") %></label>
+							  </div>
+						  </div>
+					  <% } %>
+					<% }else{ %>
+					  <div class="mx-2 alert alert-success" role="alert">
+						<h4 class="alert-heading">投稿された記事が存在しません</h4>
+						投稿してね
+					  </div>
+					<% } %>
+
+					<div class="row my-5">
+						<div class="col-1 offset-3 text-center">
+						  <input type="submit" class="btn btn-primary" value="削除">
+						</div>
+						<div class="col-1 offset-2">
+						  <input type="reset" class="btn btn-primary" value="キャンセル">
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
 
       <div class="row">
         <div class="offset-10 mt-4 mb-a">

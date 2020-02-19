@@ -20,11 +20,6 @@
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
 	StringBuffer ERMSG = null;
@@ -133,7 +128,7 @@
                       <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
                   </div>
                   <div class="offset-2">
-                      <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
+                      <a class="btn btn-outline-success" href="d_select.jsp">削除</a>
                   </div>
               </div>
 

@@ -23,8 +23,8 @@
     ArrayList<HashMap> list = null;
     list = new ArrayList<HashMap>();
 
-
 	int del_count = 0;
+
   try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
