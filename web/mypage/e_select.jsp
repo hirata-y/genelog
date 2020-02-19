@@ -1,21 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
 <%
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 
-    String article_noStr  = request.getParameter("article_no");
-	String titleStr  = request.getParameter("title");
-	String textStr  = request.getParameter("text");
-    String termStr  = request.getParameter("term");
-	String addressStr  = request.getParameter("address");
-	String designStr  = request.getParameter("design");
+	String user_noStr = (String) session.getAttribute("user_no");
 
+	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
+	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
@@ -27,29 +26,57 @@
 
 	String DRIVER = "com.mysql.jdbc.Driver";
 
+	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	int upd_count = 0;
+	//ヒットフラグ
+	int hit_flag = 0;
 
-	try{
+	//HashMap（1件分のデータを格納する連想配列）
+	HashMap<String,String> map = null;
+
+	//ArrayList（すべての件数を格納する配列）
+	ArrayList<HashMap> list = null;
+	list = new ArrayList<HashMap>();
+
+  try{	// ロードに失敗したときのための例外処理
+		// JDBCドライバのロード
 		Class.forName(DRIVER).newInstance();
+
+		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
+
+		//Statementオブジェクトの作成
 		stmt = con.createStatement();
 
-		SQL = new StringBuffer();
-        SQL.append("update article_tbl set title = '");
-		SQL.append(titleStr);
-		SQL.append("',text ='");
-		SQL.append(textStr);
-		SQL.append("',term = '");
-		SQL.append(termStr);
-		SQL.append("',address = '");
-		SQL.append(addressStr);
-		SQL.append("',design = '");
-		SQL.append(designStr);
-		SQL.append("' where article_no = ");
-		SQL.append(article_noStr);
-  	    upd_count = stmt.executeUpdate(SQL.toString());
+  		//SQLステートメントの作成（選択クエリ）
+  		SQL = new StringBuffer();
+
+		//SQL文の発行（選択クエリ）
+		SQL.append("select * from article_tbl where user_no = '");
+		SQL.append(user_noStr);
+		SQL.append("'");
+
+		//SQL文の発行（選択クエリ）
+		rs = stmt.executeQuery(SQL.toString());
+
+		//入力したデータがデータベースに存在するか調べる
+    	while(rs.next()){
+    	  //検索データをHashMapへ格納する
+    	  map = new HashMap<String,String>();
+    	  map.put("article_no",rs.getString("article_no"));
+    	  map.put("title",rs.getString("title"));
+    	  //1件分のデータ(HashMap)をArrayListへ追加
+    	  list.add(map);
+    	}
+
+    	if (list.size() > 0) {
+    	  hit_flag = 1;
+    	}
+    	else{
+    	  hit_flag = 0;
+    	}
+
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
@@ -65,6 +92,7 @@
 	}
 
 	finally{
+		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();
@@ -81,12 +109,13 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
+
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>編集完了画面</title>
+    <title>編集記事選択</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/all.css">
@@ -114,7 +143,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      編集完了
+                      選択画面
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -127,32 +156,31 @@
         </div>
 
       <div class="offset-2 my-4">
-          <div class="main offset-1 col-10">
+          <div class="main col-10 offset-1">
               <div class="row my-4">
-                  <div class="offset-4">
-                      <a class="btn btn-outline-success" href="edit_select.jsp">編集</a>
-                  </div>
-                  <div class="offset-2">
-                      <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
-                  </div>
+                <div class="offset-4">
+                    <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
+                </div>
+                <div class="offset-2">
+                    <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
+                </div>
               </div>
 
-            <% if(upd_count == 0){ %>
-              <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">エラー</h4>
-                  <div class="disc">
-                    編集処理が失敗しました
-                  </div>
+            <% if(hit_flag == 1){ %>
+              <div class="disc my-3">
+                  編集する記事を選択してください
               </div>
+              <% for(int i = 0; i < list.size(); i++){ %>
+                  <div class="alert alert-success" role="alert">
+                      <a class="art_logo" href="e_design.jsp?article_no=<%= list.get(i).get("><%= list.get(i).get("title") %></a>
+                  </div>
+              <% } %>
             <% }else{ %>
               <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">編集完了</h4>
-                  <div class="disc">
-                    <%= upd_count %>件編集しました
-                  </div>
+                <h4 class="alert-heading">投稿された記事が存在しません</h4>
+                投稿してね
               </div>
             <% } %>
-
           </div>
       </div>
 

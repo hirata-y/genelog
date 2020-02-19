@@ -45,7 +45,7 @@
         </div>
 
       <div class="offset-2 my-4">
-        <form action="t_write.jsp">
+        <form action="p_write.jsp">
           <div class="main col-10 offset-1">
             <div class="offset-1 my-4 disc">
                 記事のデザインを選んでください
@@ -53,14 +53,12 @@
             <div class="select_design">
                 <label><input type="radio" name="design" value=",col-6,col-5" required><img class="offset-2 col-8" src="../images/white.jpg"></label>
                 <label><input type="radio" name="design" value="black,col-6,col-5"><img class="offset-2 col-8" src="../images/black.jpg"></label>
-                <label><input type="radio" name="design" value="blue,col-6,col-5"><img class="offset-2 col-8" src="../images/blue.jpg"></label>
-                <label><input type="radio" name="design" value="pink,col-6,col-5"><img class="offset-2 col-8" src="../images/pink.jpg"></label>
                 <label><input type="radio" name="design" value="green,col-6,col-5"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="orange,col-6,col-5"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
                 <label><input type="radio" name="design" value=",col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
                 <label><input type="radio" name="design" value="black,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
-                <label><input type="radio" name="design" value="blue,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
-                <label><input type="radio" name="design" value="pink,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
                 <label><input type="radio" name="design" value="green,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="orange,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
             </div>
 
             <div class="row my-5">

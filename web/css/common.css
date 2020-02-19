@@ -7,7 +7,7 @@
 /*---メニューの仕様------------------------------*/
 .menu_item{
   border-radius: 20px;
-  background-color: rgba(229, 163, 35, 0.5);
+  background-color: rgba(229, 163, 35, 0.7);
   padding: 5%;
 }
 
@@ -17,12 +17,12 @@
 
 .menu_item .logo{
   font-size: 2.5rem;
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 1);
 }
 
 .menu_item:hover{
   -webkit-transition: all 0.3s linear 0s;
-  background-color: rgba(229, 163, 35, 0.8);
+  background-color: rgba(229, 163, 35, 1);
 }
 
 .menu_item:hover .menu_name{
@@ -56,7 +56,7 @@
 }
 
 .search_text{
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: rgba(0, 0, 0, 1);
 }
 
@@ -144,16 +144,8 @@
   background-color: rgba(255, 255, 255, 0.4);
 }
 
-.blue{
-  background-color: rgba(0, 175, 204, 0.8);
-}
-
-.blue .note{
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-.pink{
-  background-color: rgba(235,110,160,0.8);
+.orange{
+  background-color: rgba(252,200,0, 0.8);
 }
 
 .green{

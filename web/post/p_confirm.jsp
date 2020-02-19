@@ -57,7 +57,7 @@
         </div>
 
       <div class="offset-2 my-4">
-        <form action="post_file.jsp">
+        <form action="p_file.jsp">
               <input type="hidden" name="title" value="<%=titleStr%>">
               <input type="hidden" name="text" value="<%=textStr%>">
               <input type="hidden" name="term" value="<%=termStr%>">
@@ -80,20 +80,6 @@
                         <img class="size_img" src="../images/sample.jpg">
                       </div>
                       <textarea class="<%=design[2]%> mx-2" name="text" rows="5" placeholder="<%=textStr%>" readonly></textarea>
-                  </div>
-
-                  <div class="offset-1 my-2 disc">
-                      期間
-                  </div>
-                  <div class="col-8 mb-4">
-                      <input type="text" class="form-control" name="term" placeholder="<%=termStr%>" readonly>
-                  </div>
-
-                  <div class="offset-1 my-2 disc">
-                      住所
-                  </div>
-                  <div class="col-8 mb-4">
-                      <input type="text" class="form-control" name="address" placeholder="<%=addressStr%>" readonly>
                   </div>
 
                   <div class="note mx-2 my-4 p-4">

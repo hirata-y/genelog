@@ -1,23 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-  request.setCharacterEncoding("UTF-8");
-  response.setCharacterEncoding("UTF-8");
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
 
-  String article_noStr  = request.getParameter("article_no");
-  String titleStr  = request.getParameter("title");
-  String textStr  = request.getParameter("text");
-  String termStr  = request.getParameter("term");
-  String addressStr  = request.getParameter("address");
-  String designStr  = request.getParameter("design");
+    String article_noStr  = request.getParameter("article_no");
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>編集確認画面</title>
+    <title>デザイン選択画面</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/all.css">
+    <link rel="stylesheet" href="../css/slick.css">
+    <link rel="stylesheet" href="../css/slick-theme.css">
   </head>
   <body>
     <div class="container-fluid bg-slider">
@@ -25,7 +22,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="../post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -42,7 +39,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      確認画面
+                      デザイン選択画面
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -55,61 +52,40 @@
         </div>
 
       <div class="offset-2 my-4">
-          <form action="edit_done.jsp">
-            <input type="hidden" name="article_no" value="<%= article_noStr %>">
-            <input type="hidden" name="text" value="<%= textStr %>">
-            <input type="hidden" name="title" value="<%= titleStr %>">
-            <input type="hidden" name="term" value="<%= termStr %>">
-            <input type="hidden" name="address" value="<%= addressStr %>">
-            <input type="hidden" name="design" value="<%= designStr %>">
-            <div class="main <%=designStr%> col-10 offset-1">
-              <div class="offset-1 my-4 disc">
-                入力内容をご確認下さい
-              </div>
-              <div class="offset-1 my-2 disc">
-                タイトル
-              </div>
-              <div class="col-8 mb-4">
-                <input type="text" class="form-control-lg" name="title" placeholder="<%=titleStr%>" readonly>
-              </div>
-
-              <div class="row my-4">
-                <div class="col-6 mx-2">
-                  <img class="size_img" src="../images/sample.jpg">
-                </div>
-                <textarea class="col-5 mx-2" name="text" rows="5" placeholder="<%=textStr%>" readonly></textarea>
-              </div>
-
-              <div class="offset-1 my-2 disc">
-                期間
-              </div>
-              <div class="col-8 mb-4">
-                <input type="text" class="form-control" name="term" placeholder="<%=termStr%>" readonly>
-              </div>
-
-              <div class="offset-1 my-2 disc">
-                住所
-              </div>
-              <div class="col-8 mb-4">
-                <input type="text" class="form-control" name="address" placeholder="<%=addressStr%>" readonly>
-              </div>
-
-              <div class="row my-5">
-                <div class="col-1 offset-3 text-center">
-                  <input type="submit" class="btn btn-primary mb-2" value="登録">
-                </div>
-                <div class="col-1 offset-2">
-                  <input type="reset" class="btn btn-primary mb-2" value="キャンセル">
-                </div>
-              </div>
-
+        <form action="e_write.jsp">
+            <input type="hidden" name="article_no" value="<%=article_noStr%>">
+          <div class="main col-10 offset-1">
+            <div class="offset-1 my-4 disc">
+                記事のデザインを選んでください
             </div>
-          </form>
+            <div class="select_design">
+                <label><input type="radio" name="design" value=",col-6,col-5" required><img class="offset-2 col-8" src="../images/white.jpg"></label>
+                <label><input type="radio" name="design" value="black,col-6,col-5"><img class="offset-2 col-8" src="../images/black.jpg"></label>
+                <label><input type="radio" name="design" value="green,col-6,col-5"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="orange,col-6,col-5"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
+                <label><input type="radio" name="design" value=",col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="black,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="green,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
+                <label><input type="radio" name="design" value="orange,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
+            </div>
+
+            <div class="row my-5">
+              <div class="col-1 offset-3 text-center">
+                <input type="submit" class="btn btn-primary mb-2" value="入力画面へ">
+              </div>
+              <div class="col-1 offset-2">
+                <input type="reset" class="btn btn-primary mb-2" value="キャンセル">
+              </div>
+            </div>
+
+          </div>
+        </form>
       </div>
+
 
       <div class="row">
         <div class="offset-10 mt-4 mb-5">
-          <a class="btn btn-primary mb-2" href="../home.jsp" role="button">ホーム画面</a>
+          <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面</a>
         </div>
       </div>
 
@@ -117,6 +93,7 @@
     <script type="text/javascript" src="../js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.bgswitcher.js"></script>
+	<script type="text/javascript" src="../js/slick.min.js"></script>
     <script type="text/javascript">
 		jQuery(function($) {
 			$('.bg-slider').bgSwitcher({
@@ -129,6 +106,13 @@
           location.href = "../index.jsp";
         }
       }
+
+      $('.select_design').slick({
+          speed: 500,
+          dots: true
+          // prevArrow: '<div class="col-1 mt-5"><i class="fas fa-arrow-alt-circle-left"></i></div>',
+          // nextArrow: '<div class="col-1 mt-5"><i class="fas fa-arrow-alt-circle-right"></i></div>'
+      });
     </script>
   </body>
 </html>

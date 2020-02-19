@@ -8,6 +8,7 @@
 
     String article_noStr  = request.getParameter("article_no");
     String designStr  = request.getParameter("design");
+    String[] design = designStr.split(",", -1);
 
     Connection con = null;
     Statement stmt = null;
@@ -131,10 +132,10 @@
         </div>
 
       <div class="offset-2 my-4">
-          <form action="edit_confirm.jsp">
+          <form action="e_confirm.jsp">
               <input type="hidden" name="article_no" value="<%=article_noStr%>">
               <input type="hidden" name="design" value="<%=designStr%>">
-              <div class="main <%=designStr%> col-10 offset-1">
+              <div class="main <%=design[0]%> col-10 offset-1">
                   <div class="offset-1 my-4 disc">
                       各項目に入力してください
                   </div>
@@ -146,25 +147,20 @@
                   </div>
 
                   <div class="row my-4">
-                      <div class="col-6 mx-2">
+                      <div class="<%=design[1]%>> mx-2">
                         <img class="size_img" src="../images/sample.jpg">
                       </div>
-                      <textarea class="col-5 mx-2" name="text" rows="5" value="<%=list.get(0).get("text")%>"></textarea>
+                      <textarea class="<%=design[2]%>> mx-2" name="text" rows="5" value="<%=list.get(0).get("text")%>"></textarea>
                   </div>
 
-                  <div class="offset-1 my-2 disc">
-                      期間
+                <div class="note mx-2 my-4 p-4">
+                  <div class="row offset-1 my-2">
+                      <div class="disc col-2">期間:</div><div class="col-8 article_term"><input type="text" class="form-control" name="term" placeholder="ex)30分～1時間程度" required></div>
                   </div>
-                  <div class="col-8 mb-4">
-                      <input type="text" class="form-control" name="term" value="<%=list.get(0).get("term")%>" required>
+                  <div class="row offset-1 my-2">
+                      <div class="disc col-2">住所:</div><div class="col-8 article_term"><input type="text" class="form-control" name="address" placeholder="ex)愛知県名古屋市中村区" required></div>
                   </div>
-
-                  <div class="offset-1 my-2 disc">
-                      住所
-                  </div>
-                  <div class="col-8 mb-4">
-                    <input type="text" class="form-control" name="address" value="<%=list.get(0).get("address")%>" required>
-                  </div>
+                </div>
 
                 <div class="row my-5">
                     <div class="col-1 offset-3 text-center">

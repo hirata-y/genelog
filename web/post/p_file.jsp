@@ -6,7 +6,12 @@
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 
-	String user_noStr = (String) session.getAttribute("user_no");
+    String user_noStr = (String) session.getAttribute("user_no");
+	String titleStr  = request.getParameter("title");
+	String textStr  = request.getParameter("text");
+  	String termStr  = request.getParameter("term");
+	String addressStr  = request.getParameter("address");
+	String designStr  = request.getParameter("design");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -21,37 +26,57 @@
 
 	StringBuffer ERMSG = null;
 
-	int hit_flag = 0;
+	int ins_count = 0;
+	int ins_cnt = 0;
 
 	HashMap<String,String> map = null;
-	ArrayList<HashMap> list = null;
-	list = new ArrayList<HashMap>();
+    ArrayList<HashMap> list = null;
+    list = new ArrayList<HashMap>();
 
-  try{
+	try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
 		stmt = con.createStatement();
+		SQL = new StringBuffer();
+	  	SQL.append("insert into article_tbl(user_no,title,text,term,address,design)");
+		SQL.append(" values('");
+	 	SQL.append(user_noStr);
+	 	SQL.append("','");
+	 	SQL.append(titleStr);
+	 	SQL.append("','");
+	 	SQL.append(textStr);
+	 	SQL.append("','");
+	 	SQL.append(termStr);
+	 	SQL.append("','");
+	 	SQL.append(addressStr);
+	 	SQL.append("','");
+	 	SQL.append(designStr);
+		SQL.append("')");
+  		ins_count = stmt.executeUpdate(SQL.toString());
 
-  		SQL = new StringBuffer();
-		SQL.append("select * from article_tbl where user_no = '");
-		SQL.append(user_noStr);
-		SQL.append("'");
-		rs = stmt.executeQuery(SQL.toString());
+  		if (ins_count == 1){
+			SQL = new StringBuffer();
+			SQL.append("select article_no,user_no,title from article_tbl order by article_no desc limit 1");
+			rs = stmt.executeQuery(SQL.toString());
+			if (rs.next()){
+				map = new HashMap<String,String>();
+				map.put("article_no",rs.getString("article_no"));
+				map.put("user_no",rs.getString("user_no"));
+				map.put("title",rs.getString("title"));
+				list.add(map);
+				SQL = new StringBuffer();
+				SQL.append("insert into archive_tbl(user_no,title,action)");
+				SQL.append(" values('");
+				SQL.append(list.get(0).get("user_no"));
+				SQL.append("','");
+				SQL.append(list.get(0).get("title"));
+				SQL.append("','");
+				SQL.append(2);
+				SQL.append("')");
+				ins_cnt = stmt.executeUpdate(SQL.toString());
 
-    	while(rs.next()){
-    	  map = new HashMap<String,String>();
-    	  map.put("article_no",rs.getString("article_no"));
-    	  map.put("title",rs.getString("title"));
-    	  list.add(map);
-    	}
-
-    	if (list.size() > 0) {
-    	  hit_flag = 1;
-    	}
-    	else{
-    	  hit_flag = 0;
-    	}
-
+			}
+		}
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
@@ -83,24 +108,24 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
-
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>削除記事選択</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/all.css">
+    <title>画像ファイル選択画面</title>
+	  <link rel="stylesheet" href="../css/bootstrap.css">
+	  <link rel="stylesheet" href="../css/common.css">
+	  <link rel="stylesheet" href="../css/all.css">
   </head>
   <body>
     <div class="container-fluid bg-slider">
+
       <div class="col-2 pt-3 position-fixed">
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
-        <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
+        <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="../post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -117,7 +142,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      選択画面
+                      画像ファイル選択画面
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -130,46 +155,33 @@
         </div>
 
 		<div class="offset-2 my-4">
-
 			<div class="main col-10 offset-1">
-				<div class="row my-4">
-					<div class="offset-4">
-						<a class="btn btn-outline-success" href="e_select.jsp">編集</a>
-					</div>
-					<div class="offset-2">
-						<a class="btn btn-outline-success" href="delete_select.jsp">削除</a>
-					</div>
+				<% if(ERMSG != null){ %>
+				<div class="alert alert-success" role="alert">
+				  <h4 class="alert-heading">予期せぬエラーが発生しました</h4>
+				  <%= ERMSG %>
 				</div>
-
-				<form action="delete_done.jsp">
-					<% if(hit_flag == 1){ %>
-					  <div class="disc my-3">
-						  削除する記事を選択してください
-					  </div>
-					  <% for(int i = 0; i < list.size(); i++){ %>
-						  <div class="row my-3">
-							  <div class="offset-1 custom-control custom-checkbox">
-								  <input type="checkbox" class="custom-control-input" id="customCheck<%= i %>" name="article_no" value="<%= list.get(i).get("article_no") %>">
-								  <label class="custom-control-label disc" for="customCheck<%= i %>"><%= list.get(i).get("title") %></label>
-							  </div>
-						  </div>
-					  <% } %>
-					<% }else{ %>
-					  <div class="mx-2 alert alert-success" role="alert">
-						<h4 class="alert-heading">投稿された記事が存在しません</h4>
-						投稿してね
-					  </div>
-					<% } %>
-
-					<div class="row my-5">
-						<div class="col-1 offset-3 text-center">
-						  <input type="submit" class="btn btn-primary" value="削除">
-						</div>
-						<div class="col-1 offset-2">
-						  <input type="reset" class="btn btn-primary" value="キャンセル">
-						</div>
+				<% }else{ %>
+				<div class="alert alert-success" role="alert">
+				  <h4 class="alert-heading">記事登録完了</h4>
+				  記事のテキストデータを登録しました
+				</div>
+				<% } %>
+                  <div class="offset-1 my-4 disc">
+                      記事に挿入する画像ファイルを選択してください
+                  </div>
+				<form method="post" enctype="multipart/form-data" action="p_done.jsp">
+					<div class="row my-4 text-center">
+						<input class="offset-1" type="file" name="jpgdata">
 					</div>
-
+					<div class="file_post">
+						<input type="text" name="<%=list.get(0).get("article_no")%>" value="tmp">
+					</div>
+                    <div class="row my-5">
+                      <div class="col-1 offset-3 text-center">
+                        <input type="submit" class="btn btn-primary mb-2" value="投稿">
+                      </div>
+					</div>
 				</form>
 			</div>
 		</div>

@@ -94,7 +94,8 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
-
+    String designStr = String.valueOf(list.get(0).get("design"));
+    String[] design = designStr.split(",", -1);
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -141,17 +142,17 @@
         </div>
 
       <div class="offset-2 my-4">
-          <div class="main <%=list.get(0).get("design")%> col-10 offset-1">
+          <div class="main <%=design[0]%> col-10 offset-1">
 
               <div class="offset-1 my-4 article_title">
                   <%=list.get(0).get("title")%>
               </div>
 
               <div class="row my-4">
-                  <div class="col-6 mx-2">
+                  <div class="<%=design[1]%>> mx-2">
                       <img class="size_img" src="../image/<%=article_noStr%>.jpg">
                   </div>
-                  <div class="col-5 mx-2 article_text">
+                  <div class="<%=design[2]%>> mx-2 article_text">
                       <%=list.get(0).get("text")%>
                   </div>
               </div>

@@ -158,7 +158,7 @@
             <div class="main col-10 offset-1">
                 <div class="row my-4">
                     <div class="offset-4">
-                        <a class="btn btn-outline-success" href="edit_select.jsp">編集</a>
+                        <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
                     </div>
                     <div class="offset-2">
                         <a class="btn btn-outline-success" href="delete_select.jsp">削除</a>

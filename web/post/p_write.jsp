@@ -51,7 +51,7 @@
         </div>
 
       <div class="offset-2 my-4">
-        <form name="test" action="t_confirm.jsp">
+        <form name="test" action="p_confirm.jsp">
             <input type="hidden" name="design" value="<%=designStr%>">
             <div class="main <%=design[0]%> col-10 offset-1">
                   <div class="offset-1 my-4 disc">

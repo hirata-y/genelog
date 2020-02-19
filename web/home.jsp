@@ -224,7 +224,7 @@
 
         <div class="row">
             <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="post/t_design.jsp" role="button">ホーム画面へ</a>
+                <a class="btn btn-primary" href="post/p_design.jsp" role="button">TMP</a>
             </div>
         </div>
 
