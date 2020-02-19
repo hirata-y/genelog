@@ -144,16 +144,12 @@
   background-color: rgba(255, 255, 255, 0.4);
 }
 
-.blue{
-  background-color: rgba(0, 175, 204, 0.8);
+.orange{
+  background-color: rgba(252,200,0, 0.8);
 }
 
-.blue .note{
+.orange .note{
   background-color: rgba(255, 255, 255, 0.4);
-}
-
-.pink{
-  background-color: rgba(235,110,160,0.8);
 }
 
 .green{

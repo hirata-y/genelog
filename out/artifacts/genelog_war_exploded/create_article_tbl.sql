@@ -7,6 +7,6 @@ create table article_tbl(
     text varchar(1500),
     term varchar(100),
     address varchar(200),
-    design varchar(20),
+    design varchar(50),
     primary key(article_no)
 );

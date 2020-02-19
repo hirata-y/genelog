@@ -8,63 +8,41 @@
 
     String user_noStr = (String) session.getAttribute("user_no");
 
-	//データベースに接続するために使用する変数宣言
 	Connection con = null;
 	Statement stmt = null;
 	StringBuffer SQL = null;
 	ResultSet rs = null;
 
-	//ローカルのMySQLに接続する設定
 	String USER ="root";
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
-	//確認メッセージ
 	StringBuffer ERMSG = null;
 
-	//ヒットフラグ
 	int hit_flag = 0;
 
-	//HashMap（1件分のデータを格納する連想配列）
 	HashMap<String,String> map = null;
-
-    //ArrayList（すべての件数を格納する配列）
     ArrayList<HashMap> list = null;
     list = new ArrayList<HashMap>();
 
-  try{	// ロードに失敗したときのための例外処理
-		// JDBCドライバのロード
+  try{
 		Class.forName(DRIVER).newInstance();
-
-		// Connectionオブジェクトの作成
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
-
-		//Statementオブジェクトの作成
 		stmt = con.createStatement();
 
-  	    //SQLステートメントの作成（選択クエリ）
   	    SQL = new StringBuffer();
-
 		SQL.append("select * from archive_tbl where user_no = '");
 		SQL.append(user_noStr);
 		SQL.append("'");
-
 		rs = stmt.executeQuery(SQL.toString());
 
         while(rs.next()){
-          //検索データをHashMapへ格納する
           map = new HashMap<String,String>();
           map.put("title",rs.getString("title"));
           map.put("insert_time",rs.getString("insert_time"));
           map.put("action",rs.getString("action"));
-          //1件分のデータ(HashMap)をArrayListへ追加
           list.add(map);
         }
 
@@ -117,7 +95,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="../post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>

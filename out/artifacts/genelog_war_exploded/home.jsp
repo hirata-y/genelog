@@ -146,7 +146,7 @@
         <a href="home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -185,7 +185,7 @@
                                     <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
                                 </div>
                                 <div class="col-2 text-center">
-                                    <a class="fav_logo" href="favorite/t_delete.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                    <a class="fav_logo" href="favorite/f_delete.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                                 </div>
                             </div>
                         <% fav_cnt = fav_cnt - 1; %>
@@ -195,7 +195,7 @@
                                     <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
                                 </div>
                                 <div class="col-2 text-center">
-                                    <a class="art_logo" href="favorite/t_favorite.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                    <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                                 </div>
                             </div>
                         <% } %>
@@ -208,7 +208,7 @@
                                 <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(i).get("article_no") %>"><%= list.get(i).get("title") %></a>
                             </div>
                             <div class="col-2 text-center">
-                                <a class="art_logo" href="favorite/t_favorite.jsp?article_no=<%= list.get(i).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                                <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(i).get("article_no") %>"><i class="fas fa-paw"></i></a>
                             </div>
                         </div>
                         <% } %>
@@ -221,13 +221,6 @@
                 <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
             </div>
         </div>
-
-        <div class="row">
-            <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="post/p_design.jsp" role="button">TMP</a>
-            </div>
-        </div>
-
 
 		<% }else if (hit_flg == 2) { %>
         <div class="row p-5">

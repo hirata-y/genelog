@@ -94,7 +94,8 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
-
+    String designStr = String.valueOf(list.get(0).get("design"));
+    String[] design = designStr.split(",", -1);
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -111,7 +112,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="../post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -141,17 +142,17 @@
         </div>
 
       <div class="offset-2 my-4">
-          <div class="main <%=list.get(0).get("design")%> col-10 offset-1">
+          <div class="main <%=design[0]%> col-10 offset-1">
 
               <div class="offset-1 my-4 article_title">
                   <%=list.get(0).get("title")%>
               </div>
 
               <div class="row my-4">
-                  <div class="col-6 mx-2">
+                  <div class="<%=design[1]%> mx-2">
                       <img class="size_img" src="../image/<%=article_noStr%>.jpg">
                   </div>
-                  <div class="col-5 mx-2 article_text">
+                  <div class="<%=design[2]%> mx-2 article_text">
                       <%=list.get(0).get("text")%>
                   </div>
               </div>

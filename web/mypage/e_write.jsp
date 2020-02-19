@@ -102,7 +102,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="../post/post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -142,23 +142,23 @@
                   <div class="offset-1 my-2 disc">
                       タイトル
                   </div>
-                  <div class="col-8 mb-4">
-                      <input type="text" class="form-control-lg" name="title" value="<%=list.get(0).get("title")%>" required>
+                  <div class="row ml-3 mb-4">
+                      <input type="text" class="form-control-lg col-8" name="title" value="<%=list.get(0).get("title")%>" required>
                   </div>
 
                   <div class="row my-4">
-                      <div class="<%=design[1]%>> mx-2">
+                      <div class="<%=design[1]%> mx-2">
                         <img class="size_img" src="../images/sample.jpg">
                       </div>
-                      <textarea class="<%=design[2]%>> mx-2" name="text" rows="5" value="<%=list.get(0).get("text")%>"></textarea>
+                      <textarea class="<%=design[2]%> mx-2" name="text" rows="8" value="<%=list.get(0).get("text")%>"></textarea>
                   </div>
 
                 <div class="note mx-2 my-4 p-4">
                   <div class="row offset-1 my-2">
-                      <div class="disc col-2">期間:</div><div class="col-8 article_term"><input type="text" class="form-control" name="term" placeholder="ex)30分～1時間程度" required></div>
+                      <div class="disc col-3 text-center">期間:</div><div class="col-7 article_term"><input type="text" class="form-control" name="term" value="<%=list.get(0).get("term")%>" required></div>
                   </div>
                   <div class="row offset-1 my-2">
-                      <div class="disc col-2">住所:</div><div class="col-8 article_term"><input type="text" class="form-control" name="address" placeholder="ex)愛知県名古屋市中村区" required></div>
+                      <div class="disc col-3 text-center">住所:</div><div class="col-7 article_term"><input type="text" class="form-control" name="address" value="<%=list.get(0).get("address")%>" required></div>
                   </div>
                 </div>
 

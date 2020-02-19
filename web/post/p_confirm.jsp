@@ -27,7 +27,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -71,23 +71,23 @@
                   <div class="offset-1 my-2 disc">
                       タイトル
                   </div>
-                  <div class="col-8 mb-4">
-                      <input type="text" class="form-control-lg" name="title" placeholder="<%=titleStr%>" readonly>
+                  <div class="row ml-3 mb-4">
+                      <input type="text" class="form-control-lg col-8" name="title" placeholder="<%=titleStr%>" readonly>
                   </div>
 
                   <div class="row my-4">
                       <div class="<%=design[1]%> mx-2">
                         <img class="size_img" src="../images/sample.jpg">
                       </div>
-                      <textarea class="<%=design[2]%> mx-2" name="text" rows="5" placeholder="<%=textStr%>" readonly></textarea>
+                      <textarea class="<%=design[2]%> mx-2" name="text" rows="8" placeholder="<%=textStr%>" readonly></textarea>
                   </div>
 
                   <div class="note mx-2 my-4 p-4">
                       <div class="row offset-1 my-2">
-                          <div class="disc col-2">期間:</div><div class="col-8 article_term"><input type="text" class="form-control" name="term" placeholder="<%=termStr%>" readonly></div>
+                          <div class="disc col-3 text-center">期間:</div><div class="col-7 article_term"><input type="text" class="form-control" name="term" placeholder="<%=termStr%>" readonly></div>
                       </div>
                       <div class="row offset-1 my-2">
-                          <div class="disc col-2">住所:</div><div class="col-8 article_term"><input type="text" class="form-control" name="address" placeholder="<%=addressStr%>" readonly></div>
+                          <div class="disc col-3 text-center">住所:</div><div class="col-7 article_term"><input type="text" class="form-control" name="address" placeholder="<%=addressStr%>" readonly></div>
                       </div>
                   </div>
 

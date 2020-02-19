@@ -15,7 +15,7 @@
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
-        <a href="post_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
+        <a href="p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
@@ -55,10 +55,10 @@
                 <label><input type="radio" name="design" value="black,col-6,col-5"><img class="offset-2 col-8" src="../images/black.jpg"></label>
                 <label><input type="radio" name="design" value="green,col-6,col-5"><img class="offset-2 col-8" src="../images/green.jpg"></label>
                 <label><input type="radio" name="design" value="orange,col-6,col-5"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
-                <label><input type="radio" name="design" value=",col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
-                <label><input type="radio" name="design" value="black,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
-                <label><input type="radio" name="design" value="green,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green.jpg"></label>
-                <label><input type="radio" name="design" value="orange,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/orange.jpg"></label>
+                <label><input type="radio" name="design" value=",col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/white1.jpg"></label>
+                <label><input type="radio" name="design" value="black,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/black1.jpg"></label>
+                <label><input type="radio" name="design" value="green,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green1.jpg"></label>
+                <label><input type="radio" name="design" value="orange,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/orange1.jpg"></label>
             </div>
 
             <div class="row my-5">
