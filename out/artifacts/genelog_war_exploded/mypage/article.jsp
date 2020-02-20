@@ -7,6 +7,7 @@
 	response.setCharacterEncoding("UTF-8");
 
 	String article_noStr  = request.getParameter("article_no");
+	String user_noStr = (String) session.getAttribute("user_no");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -17,14 +18,11 @@
 	String PASSWORD = "";
 	String URL ="jdbc:mysql://localhost/genelogdb";
 
-	//サーバーのMySQLに接続する設定
-//	String USER = "nhs90664";
-//	String PASSWORD = "b19960620";
-//  String URL ="jdbc:mysql://192.168.121.16/nhs90664db";
-
 	String DRIVER = "com.mysql.jdbc.Driver";
 
 	StringBuffer ERMSG = null;
+
+	int hit_flg = 0;
 
 	HashMap<String,String> map = null;
 	ArrayList<HashMap> list = null;
@@ -63,6 +61,19 @@
 		    map.put("user_name",rs.getString("user_name"));
 		    list.add(map);
 		}
+
+		SQL = new StringBuffer();
+		SQL.append("select user_no,article_no from favorite_tbl where user_no = '");
+		SQL.append(user_noStr);
+		SQL.append("' and article_no = '");
+		SQL.append(article_noStr);
+		SQL.append("'");
+		rs = stmt.executeQuery(SQL.toString());
+
+        if (rs.next()){
+            hit_flg = 1;
+        }
+
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
@@ -144,8 +155,18 @@
       <div class="offset-2 my-4">
           <div class="main <%=design[0]%> col-10 offset-1">
 
-              <div class="offset-1 my-4 article_title">
-                  <%=list.get(0).get("title")%>
+              <div class="row my-4">
+                  <div class="offset-1 article_title">
+                      <%=list.get(0).get("title")%>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <% if (hit_flg == 1){ %>
+                      <a class="btn btn-success offset-8" href="../favorite/f_delete.jsp?article_no=<%=article_noStr%>">お気に入り解除</a>
+                  <% }else{ %>
+                      <a class="btn btn-secondary offset-8" href="../favorite/f_done.jsp?article_no=<%=article_noStr%>">お気に入り登録</a>
+                  <% } %>
               </div>
 
               <div class="row my-4">

@@ -134,7 +134,7 @@
                         <% }else if (list.get(i).get("action").equals("2")){%>
                         <p>【<%= list.get(i).get("title") %>】を投稿しました</p>
                         <% }else if (list.get(i).get("action").equals("3")){%>
-                        <p><%= list.get(i).get("title") %>を編集しました</p>
+                        <p><%= list.get(i).get("title") %>を削除しました</p>
                         <% } %>
                         <p><%= list.get(i).get("insert_time") %></p>
                     </div>
