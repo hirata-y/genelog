@@ -74,6 +74,14 @@
             hit_flg = 1;
         }
 
+		SQL = new StringBuffer();
+		SQL.append("select insert_time from archive_tbl where user_no = '");
+		SQL.append(user_noStr);
+		SQL.append("' and article_no = '");
+		SQL.append(article_noStr);
+		SQL.append("'");
+		rs = stmt.executeQuery(SQL.toString());
+
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();

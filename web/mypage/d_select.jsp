@@ -146,7 +146,7 @@
 					  <div class="disc my-3">
 						  削除する記事を選択してください
 					  </div>
-					  <% for(int i = 0; i < list.size(); i++){ %>
+					  <% for(int i = list.size() - 1; 0 <= i; i--){ %>
 						  <div class="row my-3">
 							  <div class="offset-1 custom-control custom-checkbox">
 								  <input type="checkbox" class="custom-control-input" id="customCheck<%= i %>" name="article_no" value="<%= list.get(i).get("article_no") %>">

@@ -144,7 +144,7 @@
               <div class="disc my-3">
                   編集する記事を選択してください
               </div>
-              <% for(int i = 0; i < list.size(); i++){ %>
+              <% for(int i = list.size() - 1; 0 <= i; i--){ %>
                   <div class="alert alert-success" role="alert">
                       <a class="art_logo" href="e_design.jsp?article_no=<%= list.get(i).get("article_no") %>"><%= list.get(i).get("title") %></a>
                   </div>
