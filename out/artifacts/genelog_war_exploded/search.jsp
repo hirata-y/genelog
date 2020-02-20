@@ -41,7 +41,6 @@
 		SQL.append("%' or text like '%");
 		SQL.append(searchStr);
 		SQL.append("%'");
-
 		rs = stmt.executeQuery(SQL.toString());
 
     while(rs.next()){
