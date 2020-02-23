@@ -27,6 +27,8 @@
 	HashMap<String,String> map = null;
 	ArrayList<HashMap> list = null;
 	list = new ArrayList<HashMap>();
+	ArrayList<HashMap> list1 = null;
+	list1 = new ArrayList<HashMap>();
 
     try{
 		Class.forName(DRIVER).newInstance();
@@ -75,12 +77,16 @@
         }
 
 		SQL = new StringBuffer();
-		SQL.append("select insert_time from archive_tbl where user_no = '");
-		SQL.append(user_noStr);
-		SQL.append("' and article_no = '");
+		SQL.append("select insert_time from archive_tbl where article_no = '");
 		SQL.append(article_noStr);
 		SQL.append("'");
 		rs = stmt.executeQuery(SQL.toString());
+
+		if (rs.next()){
+		    map = new HashMap<String,String>();
+		    map.put("insert_time",rs.getString("insert_time"));
+		    list1.add(map);
+        }
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -195,6 +201,9 @@
                   </div>
                   <div class="row offset-1 my-2">
                       <div class="disc">投稿者:</div><div class="offset-1 article_term"><%=list.get(1).get("user_name")%></div>
+                  </div>
+                  <div class="row offset-1 my-2">
+                      <div class="disc">投稿日時:</div><div class="offset-1 article_term"><%=list1.get(0).get("insert_time")%></div>
                   </div>
               </div>
 

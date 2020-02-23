@@ -58,6 +58,10 @@
   	    SQL.append(list.get(0).get("user_no"));
   	    SQL.append("'");
 		del_count = stmt.executeUpdate(SQL.toString());
+		SQL = new StringBuffer();
+  	    SQL.append("alter table article_tbl auto_increment = 8");
+		del_count = stmt.executeUpdate(SQL.toString());
+
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();

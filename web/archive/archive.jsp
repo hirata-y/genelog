@@ -27,6 +27,9 @@
     ArrayList<HashMap> list = null;
     list = new ArrayList<HashMap>();
 
+    ArrayList<HashMap> list1 = null;
+    list1 = new ArrayList<HashMap>();
+
   try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
@@ -40,11 +43,24 @@
 
         while(rs.next()){
           map = new HashMap<String,String>();
-          map.put("title",rs.getString("title"));
+          map.put("article_no",rs.getString("article_no"));
           map.put("insert_time",rs.getString("insert_time"));
           map.put("action",rs.getString("action"));
           list.add(map);
         }
+
+      SQL = new StringBuffer();
+      SQL.append("select * from article_tbl where user_no = '");
+      SQL.append(user_noStr);
+      SQL.append("'");
+      rs = stmt.executeQuery(SQL.toString());
+
+      while (rs.next()){
+          map = new HashMap<String,String>();
+          map.put("article_no",rs.getString("article_no"));
+          map.put("title",rs.getString("title"));
+          list1.add(map);
+      }
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -61,7 +77,6 @@
 	}
 
 	finally{
-		//各種オブジェクトクローズ
 	    try{
 	    	if(rs != null){
 	    		rs.close();
@@ -130,11 +145,17 @@
                 <div class="row mx-2 alert alert-success">
                     <div class="col-10">
                         <% if (list.get(i).get("action").equals("1")){ %>
-                        <p>ユーザー登録が完了しました</p>
+                            <p>ユーザー登録が完了しました</p>
                         <% }else if (list.get(i).get("action").equals("2")){%>
-                        <p>【<%= list.get(i).get("title") %>】を投稿しました</p>
+
+                            <% for (int j = list1.size() - 1; 0 <= j; j--){%>
+                                <% if (list.get(i).get("article_no").equals(list1.get(j).get("article_no"))){%>
+                                    <p>【<%= list1.get(j).get("title") %>】を投稿しました</p>
+                                <% } %>
+                            <% } %>
+
                         <% }else if (list.get(i).get("action").equals("3")){%>
-                        <p><%= list.get(i).get("title") %>を削除しました</p>
+                            <p><%= list.get(i).get("title") %>を削除しました</p>
                         <% } %>
                         <p><%= list.get(i).get("insert_time") %></p>
                     </div>
