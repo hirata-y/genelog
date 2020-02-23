@@ -23,18 +23,24 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flg = 0;
+	int ins_cnt = 0;
+	int upd_cnt = 0;
+	int hit_count = 0;
 
 	HashMap<String,String> map = null;
 	ArrayList<HashMap> list = null;
 	list = new ArrayList<HashMap>();
 	ArrayList<HashMap> list1 = null;
 	list1 = new ArrayList<HashMap>();
+	ArrayList<HashMap> list2 = null;
+	list2 = new ArrayList<HashMap>();
 
     try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
 		stmt = con.createStatement();
 
+		//記事情報抽出
   	    SQL = new StringBuffer();
 		SQL.append("select * from article_tbl where article_no = '");
 		SQL.append(article_noStr);
@@ -53,6 +59,7 @@
             list.add(map);
         }
 
+		//投稿者の名前抽出
 		SQL = new StringBuffer();
 		SQL.append("select user_name from user_tbl where user_no = ");
 		SQL.append(list.get(0).get("user_no"));
@@ -64,6 +71,7 @@
 		    list.add(map);
 		}
 
+		//お気に入りの有無
 		SQL = new StringBuffer();
 		SQL.append("select user_no,article_no from favorite_tbl where user_no = '");
 		SQL.append(user_noStr);
@@ -76,8 +84,9 @@
             hit_flg = 1;
         }
 
+        //投稿日抽出
 		SQL = new StringBuffer();
-		SQL.append("select insert_time from archive_tbl where article_no = '");
+		SQL.append("select cast(insert_time as date) as insert_time from archive_tbl where article_no = '");
 		SQL.append(article_noStr);
 		SQL.append("'");
 		rs = stmt.executeQuery(SQL.toString());
@@ -87,6 +96,37 @@
 		    map.put("insert_time",rs.getString("insert_time"));
 		    list1.add(map);
         }
+
+		//閲覧数の処理
+		SQL = new StringBuffer();
+		SQL.append("select * from hit_tbl where article_no = '");
+		SQL.append(article_noStr);
+		SQL.append("'");
+		rs = stmt.executeQuery(SQL.toString());
+
+		if (rs.next()){ //記事の閲覧数のカウントを1増やす処理
+			map = new HashMap<String,String>();
+			map.put("hit_cnt",rs.getString("hit_cnt"));
+			list2.add(map);
+			hit_count = Integer.parseInt(String.valueOf(list2.get(0).get("hit_cnt"))) + 1;
+
+			SQL = new StringBuffer();
+			SQL.append("update hit_tbl set hit_cnt = '");
+			SQL.append(hit_count);
+			SQL.append("' where article_no = '");
+			SQL.append(article_noStr);
+			SQL.append("'");
+  	    	upd_cnt = stmt.executeUpdate(SQL.toString());
+
+		}else{ 	//閲覧数を登録
+			SQL = new StringBuffer();
+			SQL.append("insert into hit_tbl(article_no,hit_cnt) values('");
+			SQL.append(article_noStr);
+			SQL.append("','");
+			SQL.append(1);
+			SQL.append("')");
+  	    	ins_cnt = stmt.executeUpdate(SQL.toString());
+		}
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -139,6 +179,7 @@
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
+        <a href="../rank/rank.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 
@@ -203,7 +244,7 @@
                       <div class="disc">投稿者:</div><div class="offset-1 article_term"><%=list.get(1).get("user_name")%></div>
                   </div>
                   <div class="row offset-1 my-2">
-                      <div class="disc">投稿日時:</div><div class="offset-1 article_term"><%=list1.get(0).get("insert_time")%></div>
+                      <div class="disc">投稿日:</div><div class="offset-1 article_term"><%=list1.get(0).get("insert_time")%></div>
                   </div>
               </div>
 

@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
 <%
-	request.setCharacterEncoding("UTF-8");
-	response.setCharacterEncoding("UTF-8");
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
 
-	String article_noStr[]  = request.getParameterValues("article_no");
-	String title[]  = request.getParameterValues("title");
-	String user_noStr = (String)session.getAttribute("user_no");
+    String user_noStr = (String) session.getAttribute("user_no");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -21,30 +21,25 @@
 
 	StringBuffer ERMSG = null;
 
-	int del_count = 0;
-	int upd_cnt = 0;
+	int hit_flag = 0;
+
+	HashMap<String,String> map = null;
+    ArrayList<HashMap> list = null;
+    list = new ArrayList<HashMap>();
+    ArrayList<HashMap> list1 = null;
+    list1 = new ArrayList<HashMap>();
 
   try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
 		stmt = con.createStatement();
-        SQL = new StringBuffer();
 
-        for(int i = 0; i < article_noStr.length; i++){
-          SQL = new StringBuffer();
-          SQL.append("delete from article_tbl where article_no = ");
-          SQL.append(article_noStr[i]);
-          del_count = stmt.executeUpdate(SQL.toString());
-          SQL = new StringBuffer();
-          SQL.append("insert into archive_tbl(user_no,article_no,action) values('");
-          SQL.append(user_noStr);
-          SQL.append("','");
-          SQL.append(article_noStr[i]);
-          SQL.append("','");
-          SQL.append(title[i]);
-          SQL.append("')");
-          upd_cnt = stmt.executeUpdate(SQL.toString());
-        }
+  	    SQL = new StringBuffer();
+		SQL.append("select * from archive_tbl where user_no = '");
+		SQL.append(user_noStr);
+		SQL.append("'");
+		rs = stmt.executeQuery(SQL.toString());
+
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -83,20 +78,20 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>記事削除完了</title>
+    <title>アーカイブ</title>
+      <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/all.css">
   </head>
   <body>
     <div class="container-fluid bg-slider">
       <div class="col-2 pt-3 position-fixed">
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
-        <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
+        <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
-        <a href="../rank/rank.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
+        <a href="rank.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 
@@ -112,7 +107,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      削除完了
+                      <%= session.getAttribute("user_name")%>さんのアーカイブ
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -124,45 +119,23 @@
             </div>
         </div>
 
-      <div class="offset-2 my-4">
-          <div class="main offset-1 col-10">
-              <div class="row my-4">
-                <div class="offset-4">
-                    <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
-                </div>
-                <div class="offset-2">
-                    <a class="btn btn-outline-success" href="d_select.jsp">削除</a>
-                </div>
-              </div>
-
-            <% if(del_count == 0){ %>
-              <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">エラー</h4>
-                  <div class="disc">
-                    削除処理が失敗しました
-                  </div>
-              </div>
-            <% }else{ %>
-              <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">削除完了</h4>
-                  <div class="disc">
-                    <%= del_count %>件削除しました
-                  </div>
-              </div>
-            <% } %>
-          </div>
-      </div>
-
-      <div class="row">
-        <div class="offset-10 mt-4 mb-a">
-          <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面</a>
+        <div class="offset-2 my-4">
+            <div class="main offset-1 col-10">
+                <canvas id="myBarChart"></canvas>
+            </div>
         </div>
-      </div>
+
+        <div class="row">
+            <div class="offset-10 mt-4 mb-a">
+                <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面へ</a>
+            </div>
+        </div>
 
     </div>
     <script type="text/javascript" src="../js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.bgswitcher.js"></script>
+	<script type="text/javascript" src="../js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
 		jQuery(function($) {
 			$('.bg-slider').bgSwitcher({
@@ -175,6 +148,46 @@
           location.href = "../index.jsp";
         }
       }
+      var ctx = document.getElementById("myBarChart");
+      var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
+          datasets: [
+            {
+              label: 'A店 来客数',
+              data: [62, 65, 93, 85, 51, 66, 47],
+              backgroundColor: "rgba(219,39,91,0.5)"
+            },{
+              label: 'B店 来客数',
+              data: [55, 45, 73, 75, 41, 45, 58],
+              backgroundColor: "rgba(130,201,169,0.5)"
+            },{
+              label: 'C店 来客数',
+              data: [33, 45, 62, 55, 31, 45, 38],
+              backgroundColor: "rgba(255,183,76,0.5)"
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: '支店別 来客数'
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                suggestedMax: 100,
+                suggestedMin: 0,
+                stepSize: 10,
+                callback: function(value, index, values){
+                  return  value +  '人'
+                }
+              }
+            }]
+          },
+        }
+      });
     </script>
   </body>
 </html>

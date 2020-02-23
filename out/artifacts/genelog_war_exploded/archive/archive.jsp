@@ -36,7 +36,7 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
-		SQL.append("select * from archive_tbl where user_no = '");
+		SQL.append("select article_no,cast(insert_time as date) as insert_time,action from archive_tbl where user_no = '");
 		SQL.append(user_noStr);
 		SQL.append("'");
 		rs = stmt.executeQuery(SQL.toString());
@@ -112,6 +112,7 @@
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
+        <a href="../rank/rank.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 

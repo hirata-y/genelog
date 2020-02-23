@@ -45,7 +45,6 @@
 		SQL.append("select * from user_tbl where user_name = '");
 		SQL.append(user_nameStr);
 		SQL.append("'");
-
 		rs = stmt.executeQuery(SQL.toString());
 
 		if(rs.next()){
