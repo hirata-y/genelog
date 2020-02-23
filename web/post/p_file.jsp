@@ -56,25 +56,23 @@
 
   		if (ins_count == 1){
 			SQL = new StringBuffer();
-			SQL.append("select article_no,user_no,title from article_tbl order by article_no desc limit 1");
+			SQL.append("select article_no,user_no from article_tbl order by article_no desc limit 1");
 			rs = stmt.executeQuery(SQL.toString());
 			if (rs.next()){
 				map = new HashMap<String,String>();
 				map.put("article_no",rs.getString("article_no"));
 				map.put("user_no",rs.getString("user_no"));
-				map.put("title",rs.getString("title"));
 				list.add(map);
 				SQL = new StringBuffer();
-				SQL.append("insert into archive_tbl(user_no,title,action)");
+				SQL.append("insert into archive_tbl(user_no,article_no,action)");
 				SQL.append(" values('");
 				SQL.append(list.get(0).get("user_no"));
 				SQL.append("','");
-				SQL.append(list.get(0).get("title"));
+				SQL.append(list.get(0).get("article_no"));
 				SQL.append("','");
 				SQL.append(2);
 				SQL.append("')");
 				ins_cnt = stmt.executeUpdate(SQL.toString());
-
 			}
 		}
 	}	//tryブロック終了

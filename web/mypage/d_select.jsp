@@ -150,6 +150,7 @@
 						  <div class="row my-3">
 							  <div class="offset-1 custom-control custom-checkbox">
 								  <input type="checkbox" class="custom-control-input" id="customCheck<%= i %>" name="article_no" value="<%= list.get(i).get("article_no") %>">
+								  <input type="hidden" name="title" value="<%= list.get(i).get("title") %>">
 								  <label class="custom-control-label disc" for="customCheck<%= i %>"><%= list.get(i).get("title") %></label>
 							  </div>
 						  </div>

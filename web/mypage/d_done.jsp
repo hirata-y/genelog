@@ -5,6 +5,8 @@
 	response.setCharacterEncoding("UTF-8");
 
 	String article_noStr[]  = request.getParameterValues("article_no");
+	String title[]  = request.getParameterValues("title");
+	String user_noStr = (String)session.getAttribute("user_no");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -20,6 +22,7 @@
 	StringBuffer ERMSG = null;
 
 	int del_count = 0;
+	int upd_cnt = 0;
 
   try{
 		Class.forName(DRIVER).newInstance();
@@ -32,6 +35,15 @@
           SQL.append("delete from article_tbl where article_no = ");
           SQL.append(article_noStr[i]);
           del_count = stmt.executeUpdate(SQL.toString());
+          SQL = new StringBuffer();
+          SQL.append("insert into archive_tbl(user_no,article_no,action) values('");
+          SQL.append(user_noStr);
+          SQL.append("','");
+          SQL.append(article_noStr[i]);
+          SQL.append("','");
+          SQL.append(title[i]);
+          SQL.append("')");
+          upd_cnt = stmt.executeUpdate(SQL.toString());
         }
 
 	}	//tryブロック終了

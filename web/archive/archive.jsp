@@ -155,7 +155,21 @@
                             <% } %>
 
                         <% }else if (list.get(i).get("action").equals("3")){%>
-                            <p><%= list.get(i).get("title") %>を削除しました</p>
+
+                            <% for (int j = list1.size() - 1; 0 <= j; j--){%>
+                                <% if (list.get(i).get("article_no").equals(list1.get(j).get("article_no"))){%>
+                                    <p>【<%= list1.get(j).get("title") %>】を編集しました</p>
+                                <% } %>
+                            <% } %>
+
+                        <% }else{ %>
+
+                            <% for (int j = list1.size() - 1; 0 <= j; j--){%>
+                                <% if (list.get(i).get("article_no").equals(list1.get(j).get("article_no"))){%>
+                                    <p>【<%= list.get(i).get("action") %>】を削除しました</p>
+                                <% } %>
+                            <% } %>
+                        
                         <% } %>
                         <p><%= list.get(i).get("insert_time") %></p>
                     </div>

@@ -5,6 +5,6 @@ create table archive_tbl(
     user_no varchar(10),
     article_no varchar(10),
     insert_time timestamp not null default current_timestamp,
-    action varchar(1),
+    action varchar(200),
     primary key(archive_no)
 );

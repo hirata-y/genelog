@@ -10,6 +10,7 @@
     String termStr  = request.getParameter("term");
 	String addressStr  = request.getParameter("address");
 	String designStr  = request.getParameter("design");
+	String user_noStr = (String)session.getAttribute("user_no");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -25,6 +26,7 @@
 	StringBuffer ERMSG = null;
 
 	int upd_count = 0;
+	int upd_cnt = 0;
 
 	try{
 		Class.forName(DRIVER).newInstance();
@@ -45,6 +47,19 @@
 		SQL.append("' where article_no = ");
 		SQL.append(article_noStr);
   	    upd_count = stmt.executeUpdate(SQL.toString());
+
+  	    if (upd_count == 1){
+		    SQL = new StringBuffer();
+		    SQL.append("insert into archive_tbl(user_no,article_no,action) values('");
+		    SQL.append(user_noStr);
+		    SQL.append("','");
+		    SQL.append(article_noStr);
+		    SQL.append("','");
+		    SQL.append(3);
+		    SQL.append("')");
+		    upd_cnt = stmt.executeUpdate(SQL.toString());
+        }
+
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
 		ERMSG = new StringBuffer();
