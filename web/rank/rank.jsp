@@ -7,6 +7,8 @@
     response.setCharacterEncoding("UTF-8");
 
     String user_noStr = (String) session.getAttribute("user_no");
+    String genreStr = request.getParameter("genre");
+    String title[] = new String[5];
 
 	Connection con = null;
 	Statement stmt = null;
@@ -22,6 +24,7 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flag = 0;
+	int cnt = 0;
 
 	HashMap<String,String> map = null;
     ArrayList<HashMap> list = null;
@@ -35,10 +38,39 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
-		SQL.append("select * from archive_tbl where user_no = '");
-		SQL.append(user_noStr);
-		SQL.append("'");
+		SQL.append("select article_no,hit_cnt from hit_tbl order by hit_cnt desc limit 5");
 		rs = stmt.executeQuery(SQL.toString());
+
+		while (rs.next()){
+		    map = new HashMap<String, String>();
+		    map.put("article_no", rs.getString("article_no"));
+		    map.put("hit_cnt", rs.getString("hit_cnt"));
+		    list.add(map);
+        }
+
+		SQL = new StringBuffer();
+		SQL.append("select article_no,title from article_tbl order by article_no");
+		rs = stmt.executeQuery(SQL.toString());
+
+		while (rs.next()){
+		    map = new HashMap<String, String>();
+		    map.put("article_no", rs.getString("article_no"));
+		    map.put("title", rs.getString("title"));
+		    list1.add(map);
+        }
+
+		for (int i=0; i<list.size(); i++) {
+		    cnt = 0;
+            while (cnt < list1.size()){
+                if (list.get(i).get("article_no").equals(list1.get(cnt).get("article_no"))) {
+                    title[i] = String.valueOf(list1.get(cnt).get("title"));
+                    cnt = list1.size();
+                }else{
+                    cnt = cnt + 1;
+                }
+            }
+        }
+
 
 
 	}	//tryブロック終了
@@ -78,7 +110,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>アーカイブ</title>
+    <title>ランキング</title>
       <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/all.css">
@@ -91,7 +123,7 @@
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
-        <a href="rank.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
+        <a href="rank.jsp?genre=1"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 
@@ -107,7 +139,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      <%= session.getAttribute("user_name")%>さんのアーカイブ
+                      ランキング
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -121,7 +153,31 @@
 
         <div class="offset-2 my-4">
             <div class="main offset-1 col-10">
-                <canvas id="myBarChart"></canvas>
+                <div class="row my-4">
+                    <div class="offset-2">
+                        <a class="btn btn-outline-success" href="rank.jsp?genre=1">閲覧数</a>
+                    </div>
+                    <div class="offset-2">
+                        <a class="btn btn-outline-success" href="rank.jsp?genre=2">お気に入り数</a>
+                    </div>
+                    <div class="offset-2">
+                        <a class="btn btn-outline-success" href="rank.jsp?genre=3">検索ワード</a>
+                    </div>
+                </div>
+                <% if (genreStr.equals("1")){%>
+                <canvas id="hitChart"></canvas>
+                <% }else if (genreStr.equals("2")){ %>
+                <canvas id="favoriteChart"></canvas>
+                <% }else if (genreStr.equals("3")){%>
+                <canvas id="searchChart"></canvas>
+                <% } %>
+
+                <% for (int i=0; i < title.length; i++){%>
+                    <p>タイトル:<%=title[i]%></p>
+                <% } %>
+                <%= cnt %>
+                <%= list.size() %>
+                <%= list1.size() %>
             </div>
         </div>
 
@@ -148,8 +204,42 @@
           location.href = "../index.jsp";
         }
       }
-      var ctx = document.getElementById("myBarChart");
-      var myBarChart = new Chart(ctx, {
+
+        var hitGraph = document.getElementById("hitChart");
+        var hitChart = new Chart(hitGraph, {
+            type: 'bar',
+            data: {
+                labels: ['<%=title[0]%>', '<%=title[1]%>', '<%=title[2]%>', '<%=title[3]%>', '<%=title[4]%>'],
+                datasets: [
+                    {
+                        label: '閲覧数',
+                        data: ['<%=list.get(0).get("hit_cnt")%>', '<%=list.get(1).get("hit_cnt")%>', '<%=list.get(2).get("hit_cnt")%>', '<%=list.get(3).get("hit_cnt")%>', '<%=list.get(4).get("hit_cnt")%>'],
+                        backgroundColor: "rgba(219,39,91,0.5)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: '閲覧数ランキング'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMax: 10,
+                            suggestedMin: 0,
+                            stepSize: 1,
+                            callback: function(value, index, values){
+                                return  value +  '回'
+                            }
+                        }
+                    }]
+                },
+            }
+        });
+
+      var favoriteGraph = document.getElementById("favoriteChart");
+      var favoriteChart = new Chart(favoriteGraph, {
         type: 'bar',
         data: {
           labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
@@ -172,7 +262,48 @@
         options: {
           title: {
             display: true,
-            text: '支店別 来客数'
+            text: 'お気に入り数'
+          },
+          scales: {
+            yAxes: [{
+              ticks: {
+                suggestedMax: 100,
+                suggestedMin: 0,
+                stepSize: 10,
+                callback: function(value, index, values){
+                  return  value +  '人'
+                }
+              }
+            }]
+          },
+        }
+      });
+
+      var searchGraph = document.getElementById("searchChart");
+      var searchChart = new Chart(searchGraph, {
+        type: 'bar',
+        data: {
+          labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
+          datasets: [
+            {
+              label: 'A店 来客数',
+              data: [62, 65, 93, 85, 51, 66, 47],
+              backgroundColor: "rgba(219,39,91,0.5)"
+            },{
+              label: 'B店 来客数',
+              data: [55, 45, 73, 75, 41, 45, 58],
+              backgroundColor: "rgba(130,201,169,0.5)"
+            },{
+              label: 'C店 来客数',
+              data: [33, 45, 62, 55, 31, 45, 38],
+              backgroundColor: "rgba(255,183,76,0.5)"
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: '検索ワード'
           },
           scales: {
             yAxes: [{
