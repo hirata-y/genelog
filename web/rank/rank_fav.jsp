@@ -3,10 +3,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.HashMap" %>
 <%
-	request.setCharacterEncoding("UTF-8");
-	response.setCharacterEncoding("UTF-8");
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
 
-	String user_noStr = (String) session.getAttribute("user_no");
+    String user_noStr = (String) session.getAttribute("user_no");
+    String title[] = new String[5];
 
 	Connection con = null;
 	Statement stmt = null;
@@ -22,10 +23,13 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flag = 0;
+	int cnt = 0;
 
 	HashMap<String,String> map = null;
-	ArrayList<HashMap> list = null;
-	list = new ArrayList<HashMap>();
+    ArrayList<HashMap> list = null;
+    list = new ArrayList<HashMap>();
+    ArrayList<HashMap> list1 = null;
+    list1 = new ArrayList<HashMap>();
 
   try{
 		Class.forName(DRIVER).newInstance();
@@ -33,24 +37,40 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
-		SQL.append("select article_no,title from article_tbl where user_no = '");
-		SQL.append(user_noStr);
-		SQL.append("'");
+		SQL.append("select article_no,hit_cnt from hit_tbl order by cast(hit_cnt as signed) desc limit 5");
 		rs = stmt.executeQuery(SQL.toString());
 
-    while(rs.next()){
-      map = new HashMap<String,String>();
-      map.put("article_no",rs.getString("article_no"));
-      map.put("title",rs.getString("title"));
-      list.add(map);
-    }
+		while (rs.next()){
+		    map = new HashMap<String, String>();
+		    map.put("article_no", rs.getString("article_no"));
+		    map.put("hit_cnt", rs.getString("hit_cnt"));
+		    list.add(map);
+        }
 
-    if (list.size() > 0) {
-      hit_flag = 1;
-    }
-    else{
-      hit_flag = 0;
-    }
+		SQL = new StringBuffer();
+		SQL.append("select article_no,title from article_tbl order by article_no");
+		rs = stmt.executeQuery(SQL.toString());
+
+		while (rs.next()){
+		    map = new HashMap<String, String>();
+		    map.put("article_no", rs.getString("article_no"));
+		    map.put("title", rs.getString("title"));
+		    list1.add(map);
+        }
+
+		for (int i=0; i<list.size(); i++) {
+		    cnt = 0;
+            while (cnt < list1.size()){
+                if (list.get(i).get("article_no").equals(list1.get(cnt).get("article_no"))) {
+                    title[i] = String.valueOf(list1.get(cnt).get("title"));
+                    cnt = list1.size();
+                }else{
+                    cnt = cnt + 1;
+                }
+            }
+        }
+
+
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -89,20 +109,20 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>マイページ</title>
+    <title>ランキング</title>
+      <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/all.css">
   </head>
   <body>
     <div class="container-fluid bg-slider">
       <div class="col-2 pt-3 position-fixed">
         <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
-        <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
+        <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
-        <a href="../rank/rank_hit.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
+        <a href="rank_hit.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 
@@ -118,7 +138,7 @@
               </div>
               <div class="row pt-1">
                   <div class="title col-8 text-center">
-                      <%= session.getAttribute("user_name")%>さんのマイページ
+                      ランキング
                   </div>
                   <div class="col-4 text-center">
                       <form action="../search.jsp">
@@ -131,34 +151,33 @@
         </div>
 
         <div class="offset-2 my-4">
-            <div class="main col-10 offset-1">
+            <div class="main offset-1 col-10">
                 <div class="row my-4">
-                    <div class="offset-4">
-                        <a class="btn btn-outline-success" href="e_select.jsp">編集</a>
+                    <div class="offset-2">
+                        <a class="btn btn-outline-success" href="rank_hit.jsp?">閲覧数</a>
                     </div>
                     <div class="offset-2">
-                        <a class="btn btn-outline-success" href="d_select.jsp">削除</a>
+                        <a class="btn btn-outline-success" href="rank_fav.jsp">お気に入り数</a>
+                    </div>
+                    <div class="offset-2">
+                        <a class="btn btn-outline-success" href="rank_sea.jsp">検索ワード</a>
                     </div>
                 </div>
 
-                <% if(hit_flag == 1){ %>
-                  <% for(int i = list.size() - 1; 0 <= i; i--){ %>
-                  <div class="alert alert-success" role="alert">
-                      <a class="art_logo" href="../mypage/article.jsp?article_no=<%= list.get(i).get("article_no") %>"><%= list.get(i).get("title") %></a>
-                  </div>
-                  <% } %>
-                <% }else{ %>
-                  <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">投稿された記事が存在しません</h4>
-                    投稿してね
-                  </div>
+                <canvas id="favoriteChart"></canvas>
+
+                <% for (int i=0; i < title.length; i++){%>
+                    <p>タイトル:<%=title[i]%></p>
                 <% } %>
+                <%= cnt %>
+                <%= list.size() %>
+                <%= list1.size() %>
             </div>
         </div>
 
         <div class="row">
             <div class="offset-10 mt-4 mb-a">
-                <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面</a>
+                <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面へ</a>
             </div>
         </div>
 
@@ -166,6 +185,7 @@
     <script type="text/javascript" src="../js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="../js/jquery.bgswitcher.js"></script>
+	<script type="text/javascript" src="../js/Chart.bundle.min.js"></script>
     <script type="text/javascript">
 		jQuery(function($) {
 			$('.bg-slider').bgSwitcher({
@@ -178,6 +198,39 @@
           location.href = "../index.jsp";
         }
       }
+
+        var hitGraph = document.getElementById("hitChart");
+        var hitChart = new Chart(hitGraph, {
+            type: 'bar',
+            data: {
+                labels: ['<%=title[0]%>', '<%=title[1]%>', '<%=title[2]%>', '<%=title[3]%>', '<%=title[4]%>'],
+                datasets: [
+                    {
+                        label: '閲覧数',
+                        data: ['<%=list.get(0).get("hit_cnt")%>', '<%=list.get(1).get("hit_cnt")%>', '<%=list.get(2).get("hit_cnt")%>', '<%=list.get(3).get("hit_cnt")%>', '<%=list.get(4).get("hit_cnt")%>'],
+                        backgroundColor: "rgba(0, 136, 90, 0.7)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: '閲覧数ランキング'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMax: 30,
+                            suggestedMin: 0,
+                            stepSize: 3,
+                            callback: function(value, index, values){
+                                return  value +  '回'
+                            }
+                        }
+                    }]
+                },
+            }
+        });
     </script>
   </body>
 </html>

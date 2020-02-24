@@ -6,8 +6,6 @@
     request.setCharacterEncoding("UTF-8");
     response.setCharacterEncoding("UTF-8");
 
-    String user_noStr = (String) session.getAttribute("user_no");
-    String genreStr = request.getParameter("genre");
     String title[] = new String[5];
 
 	Connection con = null;
@@ -23,7 +21,6 @@
 
 	StringBuffer ERMSG = null;
 
-	int hit_flag = 0;
 	int cnt = 0;
 
 	HashMap<String,String> map = null;
@@ -38,7 +35,7 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
-		SQL.append("select article_no,hit_cnt from hit_tbl order by hit_cnt desc limit 5");
+		SQL.append("select article_no,hit_cnt from hit_tbl order by cast(hit_cnt as signed) desc limit 5");
 		rs = stmt.executeQuery(SQL.toString());
 
 		while (rs.next()){
@@ -70,8 +67,6 @@
                 }
             }
         }
-
-
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -123,7 +118,7 @@
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
         <a href="../archive/archive.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-archive logo"></i><div class="menu_name">ARCHIVE</div></div></a>
-        <a href="rank.jsp?genre=1"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
+        <a href="rank_hit.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-award logo"></i><div class="menu_name">RANKING</div></div></a>
         <a href="#" onclick="ShowAlert()"><div class="col-8 text-center menu_item"><i class="fas fa-reply logo"></i><div class="menu_name">LOGOUT</div></div></a>
       </div>
 
@@ -155,22 +150,17 @@
             <div class="main offset-1 col-10">
                 <div class="row my-4">
                     <div class="offset-2">
-                        <a class="btn btn-outline-success" href="rank.jsp?genre=1">閲覧数</a>
+                        <a class="btn btn-outline-success" href="rank_hit.jsp">閲覧数</a>
                     </div>
                     <div class="offset-2">
-                        <a class="btn btn-outline-success" href="rank.jsp?genre=2">お気に入り数</a>
+                        <a class="btn btn-outline-success" href="rank_fav.jsp">お気に入り数</a>
                     </div>
                     <div class="offset-2">
-                        <a class="btn btn-outline-success" href="rank.jsp?genre=3">検索ワード</a>
+                        <a class="btn btn-outline-success" href="rank_sea.jsp">検索ワード</a>
                     </div>
                 </div>
-                <% if (genreStr.equals("1")){%>
+
                 <canvas id="hitChart"></canvas>
-                <% }else if (genreStr.equals("2")){ %>
-                <canvas id="favoriteChart"></canvas>
-                <% }else if (genreStr.equals("3")){%>
-                <canvas id="searchChart"></canvas>
-                <% } %>
 
                 <% for (int i=0; i < title.length; i++){%>
                     <p>タイトル:<%=title[i]%></p>
@@ -214,7 +204,7 @@
                     {
                         label: '閲覧数',
                         data: ['<%=list.get(0).get("hit_cnt")%>', '<%=list.get(1).get("hit_cnt")%>', '<%=list.get(2).get("hit_cnt")%>', '<%=list.get(3).get("hit_cnt")%>', '<%=list.get(4).get("hit_cnt")%>'],
-                        backgroundColor: "rgba(219,39,91,0.5)"
+                        backgroundColor: "rgba(0, 136, 90, 0.7)"
                     }
                 ]
             },
@@ -226,9 +216,9 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            suggestedMax: 10,
+                            suggestedMax: 30,
                             suggestedMin: 0,
-                            stepSize: 1,
+                            stepSize: 3,
                             callback: function(value, index, values){
                                 return  value +  '回'
                             }
