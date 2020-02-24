@@ -59,7 +59,7 @@
   	    SQL.append("'");
 		del_count = stmt.executeUpdate(SQL.toString());
 		SQL = new StringBuffer();
-  	    SQL.append("alter table article_tbl auto_increment = 8");
+  	    SQL.append("alter table article_tbl auto_increment = 10");
 		del_count = stmt.executeUpdate(SQL.toString());
 
 	}	//tryブロック終了
@@ -108,8 +108,10 @@
     <div class="container-fluid bg-slider">
 		<div class="row p-4">
             <div class="main col-10 offset-1">
-				<div class="disc my-5">
-					削除完了
+				<div class="row">
+					<div class="col-12 text-center disc my-5">
+						削除完了
+					</div>
 				</div>
             </div>
 		</div>

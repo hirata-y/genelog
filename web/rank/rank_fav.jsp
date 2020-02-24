@@ -6,7 +6,6 @@
     request.setCharacterEncoding("UTF-8");
     response.setCharacterEncoding("UTF-8");
 
-    String user_noStr = (String) session.getAttribute("user_no");
     String title[] = new String[5];
 
 	Connection con = null;
@@ -22,7 +21,6 @@
 
 	StringBuffer ERMSG = null;
 
-	int hit_flag = 0;
 	int cnt = 0;
 
 	HashMap<String,String> map = null;
@@ -37,13 +35,13 @@
 		stmt = con.createStatement();
 
   	    SQL = new StringBuffer();
-		SQL.append("select article_no,hit_cnt from hit_tbl order by cast(hit_cnt as signed) desc limit 5");
+		SQL.append("select article_no,count(article_no) as art_cnt from favorite_tbl group by article_no order by art_cnt desc limit 5");
 		rs = stmt.executeQuery(SQL.toString());
 
 		while (rs.next()){
 		    map = new HashMap<String, String>();
 		    map.put("article_no", rs.getString("article_no"));
-		    map.put("hit_cnt", rs.getString("hit_cnt"));
+		    map.put("art_cnt", rs.getString("art_cnt"));
 		    list.add(map);
         }
 
@@ -69,8 +67,6 @@
                 }
             }
         }
-
-
 
 	}	//tryブロック終了
 	catch(ClassNotFoundException e){
@@ -164,6 +160,12 @@
                     </div>
                 </div>
 
+                <div class="row mt-3">
+                    <div class="col-12 text-center disc">
+                        お気に入り数ランキング
+                    </div>
+                </div>
+
                 <canvas id="favoriteChart"></canvas>
 
                 <% for (int i=0; i < title.length; i++){%>
@@ -199,30 +201,29 @@
         }
       }
 
-        var hitGraph = document.getElementById("hitChart");
-        var hitChart = new Chart(hitGraph, {
+        var favoriteGraph = document.getElementById("favoriteChart");
+        var favoriteChart = new Chart(favoriteGraph, {
             type: 'bar',
             data: {
                 labels: ['<%=title[0]%>', '<%=title[1]%>', '<%=title[2]%>', '<%=title[3]%>', '<%=title[4]%>'],
                 datasets: [
                     {
-                        label: '閲覧数',
-                        data: ['<%=list.get(0).get("hit_cnt")%>', '<%=list.get(1).get("hit_cnt")%>', '<%=list.get(2).get("hit_cnt")%>', '<%=list.get(3).get("hit_cnt")%>', '<%=list.get(4).get("hit_cnt")%>'],
-                        backgroundColor: "rgba(0, 136, 90, 0.7)"
+                        label: 'お気に入り数',
+                        data: ['<%=list.get(0).get("art_cnt")%>', '<%=list.get(1).get("art_cnt")%>', '<%=list.get(2).get("art_cnt")%>', '<%=list.get(3).get("art_cnt")%>', '<%=list.get(4).get("art_cnt")%>'],
+                        backgroundColor: "rgba(220, 107, 154, 0.8)"
                     }
                 ]
             },
             options: {
                 title: {
                     display: true,
-                    text: '閲覧数ランキング'
                 },
                 scales: {
                     yAxes: [{
                         ticks: {
-                            suggestedMax: 30,
+                            suggestedMax: 10,
                             suggestedMin: 0,
-                            stepSize: 3,
+                            stepSize: 1,
                             callback: function(value, index, values){
                                 return  value +  '回'
                             }

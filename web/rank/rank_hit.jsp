@@ -160,6 +160,12 @@
                     </div>
                 </div>
 
+                <div class="row mt-3">
+                    <div class="col-12 text-center disc">
+                        閲覧数ランキング
+                    </div>
+                </div>
+
                 <canvas id="hitChart"></canvas>
 
                 <% for (int i=0; i < title.length; i++){%>
@@ -204,14 +210,13 @@
                     {
                         label: '閲覧数',
                         data: ['<%=list.get(0).get("hit_cnt")%>', '<%=list.get(1).get("hit_cnt")%>', '<%=list.get(2).get("hit_cnt")%>', '<%=list.get(3).get("hit_cnt")%>', '<%=list.get(4).get("hit_cnt")%>'],
-                        backgroundColor: "rgba(0, 136, 90, 0.7)"
+                        backgroundColor: "rgba(0, 141, 183, 0.8)"
                     }
                 ]
             },
             options: {
                 title: {
                     display: true,
-                    text: '閲覧数ランキング'
                 },
                 scales: {
                     yAxes: [{
@@ -227,88 +232,6 @@
                 },
             }
         });
-
-      var favoriteGraph = document.getElementById("favoriteChart");
-      var favoriteChart = new Chart(favoriteGraph, {
-        type: 'bar',
-        data: {
-          labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
-          datasets: [
-            {
-              label: 'A店 来客数',
-              data: [62, 65, 93, 85, 51, 66, 47],
-              backgroundColor: "rgba(219,39,91,0.5)"
-            },{
-              label: 'B店 来客数',
-              data: [55, 45, 73, 75, 41, 45, 58],
-              backgroundColor: "rgba(130,201,169,0.5)"
-            },{
-              label: 'C店 来客数',
-              data: [33, 45, 62, 55, 31, 45, 38],
-              backgroundColor: "rgba(255,183,76,0.5)"
-            }
-          ]
-        },
-        options: {
-          title: {
-            display: true,
-            text: 'お気に入り数'
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 10,
-                callback: function(value, index, values){
-                  return  value +  '人'
-                }
-              }
-            }]
-          },
-        }
-      });
-
-      var searchGraph = document.getElementById("searchChart");
-      var searchChart = new Chart(searchGraph, {
-        type: 'bar',
-        data: {
-          labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
-          datasets: [
-            {
-              label: 'A店 来客数',
-              data: [62, 65, 93, 85, 51, 66, 47],
-              backgroundColor: "rgba(219,39,91,0.5)"
-            },{
-              label: 'B店 来客数',
-              data: [55, 45, 73, 75, 41, 45, 58],
-              backgroundColor: "rgba(130,201,169,0.5)"
-            },{
-              label: 'C店 来客数',
-              data: [33, 45, 62, 55, 31, 45, 38],
-              backgroundColor: "rgba(255,183,76,0.5)"
-            }
-          ]
-        },
-        options: {
-          title: {
-            display: true,
-            text: '検索ワード'
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                suggestedMax: 100,
-                suggestedMin: 0,
-                stepSize: 10,
-                callback: function(value, index, values){
-                  return  value +  '人'
-                }
-              }
-            }]
-          },
-        }
-      });
     </script>
   </body>
 </html>

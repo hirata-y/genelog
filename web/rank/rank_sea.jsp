@@ -131,6 +131,12 @@
                     </div>
                 </div>
 
+                <div class="row mt-3">
+                    <div class="col-12 text-center disc">
+                        検索ワードランキング
+                    </div>
+                </div>
+
                 <canvas id="searchChart"></canvas>
 
             </div>
@@ -169,14 +175,13 @@
                     {
                         label: '検索数',
                         data: ['<%=list.get(0).get("search_cnt")%>', '<%=list.get(1).get("search_cnt")%>', '<%=list.get(2).get("search_cnt")%>', '<%=list.get(3).get("search_cnt")%>', '<%=list.get(4).get("search_cnt")%>'],
-                        backgroundColor: "rgba(0, 136, 90, 0.7)"
+                        backgroundColor: "rgba(0, 136, 90, 0.8)"
                     }
                 ]
             },
             options: {
                 title: {
                     display: true,
-                    text: '検索ワードランキング'
                 },
                 scales: {
                     yAxes: [{
