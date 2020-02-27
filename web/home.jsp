@@ -24,13 +24,20 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flg = 0;
-    int art_sum = 0; //listの記事件数に入れるの変数
-	int art_cnt = 0; //for文内で使用するカウント変数
-	int fav_cnt = 0; //for文内で使用するカウント変数
+	int all_cnt = 0; //すべての記事をカウントする変数
+	int my_cnt = 0; //自分の記事をカウントする変数
+	int fav_cnt = 0; //お気に入りの記事をカウントする変数
 
 	HashMap<String,String> map = null;
-    ArrayList<HashMap> list = null;
+    ArrayList<HashMap> list = null; //すべての記事を格納するリスト
     list = new ArrayList<HashMap>();
+    ArrayList<HashMap> list1 = null; //自分の記事を格納するリスト
+    list1 = new ArrayList<HashMap>();
+    ArrayList<HashMap> list2 = null; //お気に入りの記事を格納するリスト
+    list2 = new ArrayList<HashMap>();
+    map = new HashMap<String, String>();
+    list1.add(map);
+    list2.add(map);
 
   try{
 		Class.forName(DRIVER).newInstance();
@@ -52,6 +59,7 @@
                 session.setAttribute("user_name", list.get(0).get("user_name")); //セッション開始 セッション中はuser_nameがsessionに保持される。
                 user_noStr = (String)session.getAttribute("user_no");
 
+                //すべての記事のarticle_noとtitleをlistに昇順で格納
                 SQL = new StringBuffer();
                 list = new ArrayList<HashMap>();
                 SQL.append("select article_no,title from article_tbl");
@@ -70,8 +78,11 @@
 
 		if(!(user_noStr.equals(null))) { //セッション開始後の処理。
 		    hit_flg = 1;
+		    //すべての記事のarticle_noとtitleをlistに昇順で格納
             SQL = new StringBuffer();
             list = new ArrayList<HashMap>();
+            map = new HashMap<String, String>();
+            list.add(map);
             SQL.append("select article_no,title from article_tbl");
             rs = stmt.executeQuery(SQL.toString());
             while (rs.next()) {
@@ -81,9 +92,20 @@
                 list.add(map);
             }
         }
-		art_sum = list.size(); //記事数を変数に格納
 
-		if (hit_flg == 1){ // 認証OKの時、favorite_tblからuser_noをキーにarticle_noを昇順で抽出。
+		if (hit_flg == 1){
+		    //自分の記事のarticle_noをlist1に昇順で格納
+		    SQL = new StringBuffer();
+            SQL.append("select article_no from article_tbl where user_no = '");
+            SQL.append(user_noStr);
+            SQL.append("' order by cast(article_no as signed)");
+            rs = stmt.executeQuery(SQL.toString());
+            while (rs.next()){
+                  map = new HashMap<String,String>();
+                  map.put("article_no",rs.getString("article_no"));
+                  list1.add(map);
+            }
+            //お気に入りのarticle_noをlist2に昇順で格納
 		    SQL = new StringBuffer();
             SQL.append("select article_no from favorite_tbl where user_no = '");
             SQL.append(user_noStr);
@@ -92,7 +114,7 @@
             while (rs.next()){
                   map = new HashMap<String,String>();
                   map.put("article_no",rs.getString("article_no"));
-                  list.add(map);
+                  list2.add(map);
             }
         }
 
@@ -127,8 +149,9 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
-    art_cnt = art_sum - 1;
-    fav_cnt = list.size() - 1;
+  all_cnt = list.size() -1;
+  my_cnt = list1.size() -1;
+  fav_cnt = list2.size() -1;
 %>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -178,42 +201,40 @@
 
         <div class="offset-2 my-4">
             <div class="main offset-1 col-10">
-                <% if (list.size() > art_sum){ %>
-                    <% while (art_cnt >= 0){%>
-                        <% if (list.get(art_cnt).get("article_no").equals(list.get(fav_cnt).get("article_no")) && fav_cnt >= art_sum - 1){%>
-                            <div class="row mx-2 alert alert-success">
-                                <div class="col-10">
-                                    <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
-                                </div>
-                                <div class="col-2 text-center">
-                                    <a class="fav_logo" href="favorite/f_delete.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
-                                </div>
-                            </div>
-                        <% fav_cnt = fav_cnt - 1; %>
-                        <% }else{%>
-                            <div class="row mx-2 alert alert-success">
-                                <div class="col-10">
-                                    <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><%= list.get(art_cnt).get("title") %></a>
-                                </div>
-                                <div class="col-2 text-center">
-                                    <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(art_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
-                                </div>
-                            </div>
-                        <% } %>
-                    <% art_cnt = art_cnt - 1; %>
-                    <% } %>
+                <% while (all_cnt > 0 || my_cnt > 0 || fav_cnt > 0){%>
+                <% if (list.get(all_cnt).get("article_no").equals(list1.get(my_cnt).get("article_no"))){ %>
+                <div class="row mx-2 alert alert-success">
+                    <div class="col-10">
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                    </div>
+                    <div class="col-2 text-center">
+                        自分の記事
+                    </div>
+                </div>
+                <% my_cnt = my_cnt - 1; %>
+                <% }else if (list.get(all_cnt).get("article_no").equals(list2.get(fav_cnt).get("article_no"))){ %>
+                <div class="row mx-2 alert alert-success">
+                    <div class="col-10">
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                    </div>
+                    <div class="col-2 text-center">
+                        <a class="fav_logo" href="favorite/f_delete.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                    </div>
+                </div>
+                <% fav_cnt = fav_cnt - 1; %>
                 <% }else{ %>
-                        <% for (int i = art_sum - 1; 0 <= i; i--){%>
-                        <div class="row mx-2 alert alert-success">
-                            <div class="col-10">
-                                <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(i).get("article_no") %>"><%= list.get(i).get("title") %></a>
-                            </div>
-                            <div class="col-2 text-center">
-                                <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(i).get("article_no") %>"><i class="fas fa-paw"></i></a>
-                            </div>
-                        </div>
-                        <% } %>
+                <div class="row mx-2 alert alert-success">
+                    <div class="col-10">
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                    </div>
+                    <div class="col-2 text-center">
+                        <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                    </div>
+                </div>
                 <% } %>
+                <% all_cnt = all_cnt - 1; %>
+                <% } %>
+
             </div>
         </div>
 

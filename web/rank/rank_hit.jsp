@@ -169,11 +169,13 @@
                 <canvas id="hitChart"></canvas>
 
                 <% for (int i=0; i < title.length; i++){%>
-                    <p>タイトル:<%=title[i]%></p>
+                    <div class="row my-2">
+                        <div class="offset-2 art_logo">
+                            <%=i+1%>位<a class="mx-2" href="../mypage/article.jsp?article_no=<%=list.get(i).get("article_no")%>"><%=title[i]%></a>
+                        </div>
+                    </div>
                 <% } %>
-                <%= cnt %>
-                <%= list.size() %>
-                <%= list1.size() %>
+
             </div>
         </div>
 

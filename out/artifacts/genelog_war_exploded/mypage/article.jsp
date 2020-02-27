@@ -8,6 +8,7 @@
 
 	String article_noStr  = request.getParameter("article_no");
 	String user_noStr = (String) session.getAttribute("user_no");
+	String user_nameStr = (String)session.getAttribute("user_name");
 
 	Connection con = null;
 	Statement stmt = null;
@@ -218,9 +219,13 @@
 
               <div class="row">
                   <% if (hit_flg == 1){ %>
-                      <a class="btn btn-success offset-8" href="../favorite/f_delete.jsp?article_no=<%=article_noStr%>">お気に入り解除</a>
+				  	<a class="btn btn-success offset-8" href="../favorite/f_delete.jsp?article_no=<%=article_noStr%>">お気に入り解除</a>
                   <% }else{ %>
-                      <a class="btn btn-secondary offset-8" href="../favorite/f_done.jsp?article_no=<%=article_noStr%>">お気に入り登録</a>
+				  <% if (user_noStr.equals(list.get(0).get("user_no"))){ %>
+				  	<div class="offset-8 disc"><%=user_nameStr%>さんの記事</div>
+                  <% }else{ %>
+				  	<a class="btn btn-secondary offset-8" href="../favorite/f_done.jsp?article_no=<%=article_noStr%>">お気に入り登録</a>
+                  <% } %>
                   <% } %>
               </div>
 
