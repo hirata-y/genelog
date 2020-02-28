@@ -12,7 +12,7 @@
   <body>
     <div class="container-fluid bg-slider">
       <div class="col-2 pt-3 position-fixed">
-        <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
+        <a href="../home.jsp?sort=1"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="../mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
@@ -61,6 +61,10 @@
                 <label><input type="radio" name="design" value="green,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/green1.jpg"></label>
                 <label><input type="radio" name="design" value="orange,col-10 offset-1 my-4,col-10 offset-1 my-4"><img class="offset-2 col-8" src="../images/orange1.jpg"></label>
             </div>
+
+              <div class="row offset-1 my-2 disc">
+                  選択する記事をクリックして次へ
+              </div>
 
             <div class="row my-5">
               <div class="col-1 offset-3 text-center">

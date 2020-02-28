@@ -93,7 +93,7 @@
   <body>
     <div class="container-fluid bg-slider">
       <div class="col-2 pt-3 position-fixed">
-        <a href="../home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
+        <a href="../home.jsp?sort=1"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="../favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="../post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
@@ -145,7 +145,7 @@
                       <div class="<%=design[1]%> mx-2">
                         <img class="size_img" src="../images/sample.jpg">
                       </div>
-                      <textarea class="<%=design[2]%> mx-2" name="text" rows="8" value="<%=list.get(0).get("text")%>"></textarea>
+                      <textarea class="<%=design[2]%> mx-2" name="text" rows="8"><%=list.get(0).get("text")%></textarea>
                   </div>
 
                 <div class="note mx-2 my-4 p-4">
