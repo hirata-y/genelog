@@ -222,7 +222,9 @@
 				  	<a class="btn btn-success offset-8" href="../favorite/f_delete.jsp?article_no=<%=article_noStr%>">お気に入り解除</a>
                   <% }else{ %>
 				  <% if (user_noStr.equals(list.get(0).get("user_no"))){ %>
-				  	<div class="offset-8 disc"><%=user_nameStr%>さんの記事</div>
+<%--				  	<div class="offset-8 disc"><%=user_nameStr%>さんの記事</div>--%>
+				  	<a class="btn btn-outline-primary offset-7" href="e_design.jsp?article_no=<%=article_noStr%>">編集</a>
+				  	<a class="btn btn-outline-primary offset-1" href="d_done.jsp?article_no=<%=article_noStr%>">削除</a>
                   <% }else{ %>
 				  	<a class="btn btn-secondary offset-8" href="../favorite/f_done.jsp?article_no=<%=article_noStr%>">お気に入り登録</a>
                   <% } %>
