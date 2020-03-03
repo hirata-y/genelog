@@ -153,7 +153,7 @@
                         <a class="btn btn-outline-success" href="rank_hit.jsp?">閲覧数</a>
                     </div>
                     <div class="offset-2">
-                        <a class="btn btn-outline-success" href="rank_fav.jsp">お気に入り数</a>
+                        <a class="btn btn-success" href="rank_fav.jsp">お気に入り数</a>
                     </div>
                     <div class="offset-2">
                         <a class="btn btn-outline-success" href="rank_sea.jsp">検索ワード</a>

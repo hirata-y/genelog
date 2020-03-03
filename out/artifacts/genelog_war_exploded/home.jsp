@@ -25,6 +25,7 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flg = 0;
+	int up_cnt = 0;
 	int check_flg = 0; //お気に入りの記事をカウントする変数
 
 	HashMap<String,String> map = new HashMap<String, String>();
@@ -64,12 +65,14 @@
 		if(!(user_noStr.equals(null))) { //セッション開始後の処理。すべての記事をlistに昇順で格納する
 		    hit_flg = 1;
 		    SQL = new StringBuffer();
-		    if (sortStr.equals("1")){ //新着順
+            if (sortStr.equals("1")) {
                 SQL.append("select article_no,title from article_tbl");
-            }else if (sortStr.equals("2")){ //閲覧数順
+            }else if (sortStr.equals("2")) {
                 SQL.append(" select art.article_no,art.title from article_tbl as art inner join hit_tbl as hit on art.article_no = hit.article_no order by cast(hit_cnt as signed)");
-            }else if (sortStr.equals("3")){ //お気に入り数順
-                SQL.append("select article_no,count(article_no) as art_cnt from favorite_tbl group by article_no order by art_cnt desc");
+            }else if (sortStr.equals("3")){
+//                SQL.append("create view fav_rank as select article_no,count(article_no) as art_cnt from favorite_tbl group by article_no order by art_cnt");
+//		        up_cnt = stmt.executeUpdate(SQL.toString());
+		        SQL.append("select art.article_no,art.title from article_tbl as art left outer join fav_rank as fav on art.article_no = fav.article_no order by fav.art_cnt");
             }
 
 		    rs = stmt.executeQuery(SQL.toString());
@@ -137,7 +140,7 @@
 	}
 %>
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>ホーム画面</title>
@@ -149,7 +152,7 @@
     <div class="container-fluid bg-slider">
       <% if (hit_flg == 1) { %>
       <div class="col-2 pt-3 position-fixed">
-        <a href="home.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
+        <a href="home.jsp?sort=1"><div class="col-8 text-center menu_item"><i class="fas fa-home logo"></i><div class="menu_name">HOME</div></div></a>
         <a href="mypage/mypage.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-user logo"></i><div class="menu_name">MYPAGE</div></div></a>
         <a href="favorite/favorite.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-paw logo"></i><div class="menu_name">FAVORITE</div></div></a>
         <a href="post/p_design.jsp"><div class="col-8 text-center menu_item"><i class="fas fa-edit logo"></i><div class="menu_name">POST</div></div></a>
@@ -187,13 +190,25 @@
 
                 <div class="row my-4">
                     <div class="offset-2">
+                        <% if (sortStr.equals("1")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=1">新着順</a>
+                        <% }else { %>
                         <a class="btn btn-outline-success" href="home.jsp?sort=1">新着順</a>
+                        <% } %>
                     </div>
                     <div class="offset-2">
+                        <% if (sortStr.equals("2")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=2">閲覧数順</a>
+                        <% }else { %>
                         <a class="btn btn-outline-success" href="home.jsp?sort=2">閲覧数順</a>
+                        <% } %>
                     </div>
                     <div class="offset-2">
+                        <% if (sortStr.equals("3")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=3">お気に入り数順</a>
+                        <% }else { %>
                         <a class="btn btn-outline-success" href="home.jsp?sort=3">お気に入り数順</a>
+                        <% } %>
                     </div>
                 </div>
 
@@ -243,12 +258,6 @@
         <div class="row">
             <div class="offset-10 my-5">
                 <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="tmp.jsp" role="button">テスト</a>
             </div>
         </div>
 
