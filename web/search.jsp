@@ -190,7 +190,7 @@
 
         <div class="row">
             <div class="offset-10 mt-5 mb-a">
-                <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
+                <a class="btn btn-primary" href="home.jsp?sort=1" role="button">ホーム画面へ</a>
             </div>
         </div>
 

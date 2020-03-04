@@ -86,7 +86,7 @@
 
       <div class="row">
         <div class="offset-10 mt-4 mb-5">
-          <a class="btn btn-primary" href="../home.jsp" role="button">ホーム画面</a>
+          <a class="btn btn-primary" href="../home.jsp?sort=1" role="button">ホーム画面</a>
         </div>
       </div>
 
