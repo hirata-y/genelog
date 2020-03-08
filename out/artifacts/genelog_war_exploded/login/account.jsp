@@ -95,7 +95,7 @@
         document.test.user_sex[0].checked = true;
         document.test.user_birth.value = "2000-02-21";
         document.test.user_mail.value = "suzuki@gmail.com";
-        document.test.user_pass.value = "suzuki0221test";
+        document.test.user_pass.value = "suzuki";
       }
     </script>
   </body>

@@ -8,6 +8,7 @@
 
     String user_nameStr  = request.getParameter("user_name");
     String user_passStr  = request.getParameter("user_pass");
+    String sortStr  = request.getParameter("sort");
     String user_noStr = (String) session.getAttribute("user_no");
 
 	Connection con = null;
@@ -24,97 +25,85 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flg = 0;
-	int all_cnt = 0; //すべての記事をカウントする変数
-	int my_cnt = 0; //自分の記事をカウントする変数
-	int fav_cnt = 0; //お気に入りの記事をカウントする変数
+	int up_cnt = 0;
+	int check_flg = 0; //お気に入りの記事をカウントする変数
 
-	HashMap<String,String> map = null;
-    ArrayList<HashMap> list = null; //すべての記事を格納するリスト
-    list = new ArrayList<HashMap>();
-    ArrayList<HashMap> list1 = null; //自分の記事を格納するリスト
-    list1 = new ArrayList<HashMap>();
-    ArrayList<HashMap> list2 = null; //お気に入りの記事を格納するリスト
-    list2 = new ArrayList<HashMap>();
-    map = new HashMap<String, String>();
-    list1.add(map);
-    list2.add(map);
+	HashMap<String,String> map = new HashMap<String, String>();
+    ArrayList<HashMap> all_list = new ArrayList<HashMap>(); //すべての記事を格納するリスト
+    ArrayList<HashMap> my_list = new ArrayList<HashMap>(); //自分の記事を格納するリスト
+    ArrayList<HashMap> fav_list = new ArrayList<HashMap>(); //お気に入りの記事を格納するリスト
+    ArrayList<HashMap> check_list = new ArrayList<HashMap>(); //認証用リスト
+    all_list.add(map);
+    my_list.add(map);
+    fav_list.add(map);
 
   try{
 		Class.forName(DRIVER).newInstance();
 		con = DriverManager.getConnection(URL,USER,PASSWORD);
 		stmt = con.createStatement();
   	    SQL = new StringBuffer();
-		SQL.append("select * from user_tbl where user_name = '"); //user_tbl内のuser_nameと入力されたユーザー名が一致するレコードを抽出.
-		SQL.append(user_nameStr);
-		SQL.append("'");
+		SQL.append("select * from user_tbl where user_name = '" + user_nameStr + "'"); //user_tbl内のuser_nameと入力されたユーザー名が一致するレコードを抽出.
 		rs = stmt.executeQuery(SQL.toString());
+
 		if(rs.next()){
-			hit_flg = 1;
 		    if(user_passStr.equals(rs.getString("user_pass"))){ //user_nameで抽出したレコード内で、user_passと入力されたパスワードが一致すればhashmapに格納
 		        map = new HashMap<String,String>();
 		        map.put("user_no",rs.getString("user_no"));
 		        map.put("user_name",rs.getString("user_name"));
-                list.add(map);
-                session.setAttribute("user_no", list.get(0).get("user_no")); //セッション開始 セッション中はuser_noがsessionに保持される。
-                session.setAttribute("user_name", list.get(0).get("user_name")); //セッション開始 セッション中はuser_nameがsessionに保持される。
+                check_list.add(map);
+                session.setAttribute("user_no", check_list.get(0).get("user_no")); //セッション開始 セッション中はuser_noがsessionに保持される。
+                session.setAttribute("user_name", check_list.get(0).get("user_name")); //セッション開始 セッション中はuser_nameがsessionに保持される。
                 user_noStr = (String)session.getAttribute("user_no");
+                sortStr = "1";
 
-                //すべての記事のarticle_noとtitleをlistに昇順で格納
-                SQL = new StringBuffer();
-                list = new ArrayList<HashMap>();
-                SQL.append("select article_no,title from article_tbl");
-		        rs = stmt.executeQuery(SQL.toString());
-				while(rs.next()){
-                  map = new HashMap<String,String>();
-                  map.put("article_no",rs.getString("article_no"));
-                  map.put("title",rs.getString("title"));
-                  list.add(map);
-                }
 			}else //パスワード不一致
 			      hit_flg = 2;
 		}else{ //ユーザー名が存在しない
 				hit_flg = 0;
 		}
 
-		if(!(user_noStr.equals(null))) { //セッション開始後の処理。
+		if(!(user_noStr.equals(null))) { //セッション開始後の処理。すべての記事をlistに昇順で格納する
 		    hit_flg = 1;
-		    //すべての記事のarticle_noとtitleをlistに昇順で格納
-            SQL = new StringBuffer();
-            list = new ArrayList<HashMap>();
-            map = new HashMap<String, String>();
-            list.add(map);
-            SQL.append("select article_no,title from article_tbl");
-            rs = stmt.executeQuery(SQL.toString());
-            while (rs.next()) {
-                map = new HashMap<String, String>();
-                map.put("article_no", rs.getString("article_no"));
-                map.put("title", rs.getString("title"));
-                list.add(map);
+		    SQL = new StringBuffer();
+            if (sortStr.equals("1")) {
+                SQL.append("select article_no,title from article_tbl");
+            }else if (sortStr.equals("2")) {
+                SQL.append(" select art.article_no,art.title from article_tbl as art inner join hit_tbl as hit on art.article_no = hit.article_no order by cast(hit_cnt as signed)");
+            }else if (sortStr.equals("3")){
+//                SQL.append("create view fav_rank as select article_no,count(article_no) as art_cnt from favorite_tbl group by article_no order by art_cnt");
+//		        up_cnt = stmt.executeUpdate(SQL.toString());
+		        SQL.append("select art.article_no,art.title from article_tbl as art left outer join fav_rank as fav on art.article_no = fav.article_no order by fav.art_cnt");
             }
+
+		    rs = stmt.executeQuery(SQL.toString());
+		    while (rs.next()) {
+		        map = new HashMap<String, String>();
+		        map.put("article_no", rs.getString("article_no"));
+		        map.put("title", rs.getString("title"));
+		        all_list.add(map);
+		    }
         }
 
-		if (hit_flg == 1){
-		    //自分の記事のarticle_noをlist1に昇順で格納
+		if (hit_flg == 1){ //自分の記事のarticle_noをmy_listに昇順で格納
 		    SQL = new StringBuffer();
-            SQL.append("select article_no from article_tbl where user_no = '");
-            SQL.append(user_noStr);
-            SQL.append("' order by cast(article_no as signed)");
+            SQL.append("select article_no from article_tbl where user_no = '" + user_noStr + "' order by cast(article_no as signed)");
             rs = stmt.executeQuery(SQL.toString());
+
             while (rs.next()){
                   map = new HashMap<String,String>();
                   map.put("article_no",rs.getString("article_no"));
-                  list1.add(map);
+                  my_list.add(map);
             }
-            //お気に入りのarticle_noをlist2に昇順で格納
+
+            //お気に入りのarticle_noをfav_listに昇順で格納
 		    SQL = new StringBuffer();
-            SQL.append("select article_no from favorite_tbl where user_no = '");
-            SQL.append(user_noStr);
-            SQL.append("' order by cast(article_no as signed)");
+            SQL.append("select article_no from favorite_tbl where user_no = '" + user_noStr + "' order by cast(article_no as signed)");
             rs = stmt.executeQuery(SQL.toString());
+
             while (rs.next()){
                   map = new HashMap<String,String>();
                   map.put("article_no",rs.getString("article_no"));
-                  list2.add(map);
+                  fav_list.add(map);
             }
         }
 
@@ -149,12 +138,9 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
-  all_cnt = list.size() -1;
-  my_cnt = list1.size() -1;
-  fav_cnt = list2.size() -1;
 %>
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>ホーム画面</title>
@@ -201,39 +187,69 @@
 
         <div class="offset-2 my-4">
             <div class="main offset-1 col-10">
-                <% while (all_cnt > 0 || my_cnt > 0 || fav_cnt > 0){%>
-                <% if (list.get(all_cnt).get("article_no").equals(list1.get(my_cnt).get("article_no"))){ %>
+
+                <div class="row my-4">
+                    <div class="offset-2">
+                        <% if (sortStr.equals("1")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=1">新着順</a>
+                        <% }else { %>
+                        <a class="btn btn-outline-success" href="home.jsp?sort=1">新着順</a>
+                        <% } %>
+                    </div>
+                    <div class="offset-2">
+                        <% if (sortStr.equals("2")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=2">閲覧数順</a>
+                        <% }else { %>
+                        <a class="btn btn-outline-success" href="home.jsp?sort=2">閲覧数順</a>
+                        <% } %>
+                    </div>
+                    <div class="offset-2">
+                        <% if (sortStr.equals("3")){%>
+                        <a class="btn btn-success" href="home.jsp?sort=3">お気に入り数順</a>
+                        <% }else { %>
+                        <a class="btn btn-outline-success" href="home.jsp?sort=3">お気に入り数順</a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <% for (int all_cnt = all_list.size() - 1; 0 < all_cnt; all_cnt--){%>
+                <% check_flg = 0; %>
+                <% for (int my_cnt = my_list.size() - 1; 0 < my_cnt; my_cnt--){ %>
+                <% if (all_list.get(all_cnt).get("article_no").equals(my_list.get(my_cnt).get("article_no"))){ %>
                 <div class="row mx-2 alert alert-success">
                     <div class="col-10">
-                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= all_list.get(all_cnt).get("article_no") %>"><%= all_list.get(all_cnt).get("title") %></a>
                     </div>
                     <div class="col-2　text-center">
                         自分の記事
                     </div>
-
                 </div>
-                <% my_cnt = my_cnt - 1; %>
-                <% }else if (list.get(all_cnt).get("article_no").equals(list2.get(fav_cnt).get("article_no"))){ %>
+                <% check_flg = 1; %>
+                <% } %>
+                <% } %>
+                <% for (int fav_cnt = fav_list.size() - 1; 0 < fav_cnt; fav_cnt--){ %>
+                <% if (all_list.get(all_cnt).get("article_no").equals(fav_list.get(fav_cnt).get("article_no"))){ %>
                 <div class="row mx-2 alert alert-success">
                     <div class="col-10">
-                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= all_list.get(all_cnt).get("article_no") %>"><%= all_list.get(all_cnt).get("title") %></a>
                     </div>
                     <div class="col-2 text-center">
-                        <a class="fav_logo" href="favorite/f_delete.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                        <a class="fav_logo" href="favorite/f_delete.jsp?article_no=<%= all_list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                     </div>
                 </div>
-                <% fav_cnt = fav_cnt - 1; %>
-                <% }else{ %>
+                <% check_flg = 1; %>
+                <% } %>
+                <% } %>
+                <% if (check_flg == 0){%>
                 <div class="row mx-2 alert alert-success">
                     <div class="col-10">
-                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><%= list.get(all_cnt).get("title") %></a>
+                        <a class="art_logo" href="mypage/article.jsp?article_no=<%= all_list.get(all_cnt).get("article_no") %>"><%= all_list.get(all_cnt).get("title") %></a>
                     </div>
                     <div class="col-2 text-center">
-                        <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
+                        <a class="art_logo" href="favorite/f_done.jsp?article_no=<%= all_list.get(all_cnt).get("article_no") %>"><i class="fas fa-paw"></i></a>
                     </div>
                 </div>
                 <% } %>
-                <% all_cnt = all_cnt - 1; %>
                 <% } %>
 
             </div>
@@ -241,13 +257,7 @@
 
         <div class="row">
             <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="tmp.jsp" role="button">テスト</a>
+                <a class="btn btn-primary" href="home.jsp?sort=1" role="button">ホーム画面へ</a>
             </div>
         </div>
 

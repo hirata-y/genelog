@@ -9,6 +9,7 @@
     String user_nameStr  = request.getParameter("user_name");
     String user_passStr  = request.getParameter("user_pass");
     String sortStr  = request.getParameter("sort");
+    String pageStr  = request.getParameter("page");
     String user_noStr = (String) session.getAttribute("user_no");
 
 	Connection con = null;
@@ -25,8 +26,9 @@
 	StringBuffer ERMSG = null;
 
 	int hit_flg = 0;
-	int up_cnt = 0;
+//	int up_cnt = 0;
 	int check_flg = 0; //お気に入りの記事をカウントする変数
+    int pageInt = 0;
 
 	HashMap<String,String> map = new HashMap<String, String>();
     ArrayList<HashMap> all_list = new ArrayList<HashMap>(); //すべての記事を格納するリスト
@@ -65,11 +67,11 @@
 		if(!(user_noStr.equals(null))) { //セッション開始後の処理。すべての記事をlistに昇順で格納する
 		    hit_flg = 1;
 		    SQL = new StringBuffer();
-            if (sortStr.equals("1")) {
+            if (sortStr.equals("1")) { //新着順
                 SQL.append("select article_no,title from article_tbl");
-            }else if (sortStr.equals("2")) {
+            }else if (sortStr.equals("2")) { //閲覧数順
                 SQL.append(" select art.article_no,art.title from article_tbl as art inner join hit_tbl as hit on art.article_no = hit.article_no order by cast(hit_cnt as signed)");
-            }else if (sortStr.equals("3")){
+            }else if (sortStr.equals("3")){ //お気に入り数順
 //                SQL.append("create view fav_rank as select article_no,count(article_no) as art_cnt from favorite_tbl group by article_no order by art_cnt");
 //		        up_cnt = stmt.executeUpdate(SQL.toString());
 		        SQL.append("select art.article_no,art.title from article_tbl as art left outer join fav_rank as fav on art.article_no = fav.article_no order by fav.art_cnt");
@@ -138,6 +140,18 @@
 		ERMSG.append(e.getMessage());
 		}
 	}
+  int all_page = (all_list.size() / 10) + 1;
+  int page_flg = 0;
+  if (pageStr == null){
+      pageInt = 1;
+  }else {
+      pageInt = Integer.parseInt(pageStr);
+  }
+  if (pageInt == all_page){
+      page_flg = 0;
+  }else {
+      page_flg = all_list.size() - (pageInt-1) * 10 - 11;
+  }
 %>
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
@@ -212,7 +226,7 @@
                     </div>
                 </div>
 
-                <% for (int all_cnt = all_list.size() - 1; 0 < all_cnt; all_cnt--){%>
+                <% for (int all_cnt = all_list.size() - (pageInt-1) * 10 - 1; page_flg < all_cnt; all_cnt--){%>
                 <% check_flg = 0; %>
                 <% for (int my_cnt = my_list.size() - 1; 0 < my_cnt; my_cnt--){ %>
                 <% if (all_list.get(all_cnt).get("article_no").equals(my_list.get(my_cnt).get("article_no"))){ %>
@@ -252,12 +266,34 @@
                 <% } %>
                 <% } %>
 
+                <div class="offset-5 my-4" aria-label="Page navigation">
+                    <div class="pagination col-2">
+                        <% if (pageInt == 1){ %>
+                        <div class="page-item disabled"><a class="page-link">Prev</a></div>
+                        <% }else{ %>
+                        <div class="page-item"><a class="page-link" href="home.jsp?sort=<%=sortStr%>&page=<%=pageInt-1%>">Prev</a></div>
+                        <% }%>
+                        <% for (int page_cnt = 1; page_cnt <= all_page; page_cnt++){ %>
+                        <% if (page_cnt == pageInt){ %>
+                        <div class="page-item active"><span class="page-link"><%=page_cnt%><span class="sr-only">(current)</span></span></div>
+                        <% }else{ %>
+                        <div class="page-item"><a class="page-link" href="home.jsp?sort=<%=sortStr%>&page=<%=page_cnt%>"><%=page_cnt%></a></div>
+                        <% } %>
+                        <% } %>
+                        <% if (pageInt == all_page){ %>
+                        <div class="page-item disabled"><a class="page-link">Next</a></div>
+                        <% }else{ %>
+                        <div class="page-item"><a class="page-link" href="home.jsp?sort=<%=sortStr%>&page=<%=pageInt+1%>">Next</a></div>
+                        <% } %>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div class="row">
             <div class="offset-10 my-5">
-                <a class="btn btn-primary" href="home.jsp" role="button">ホーム画面へ</a>
+                <a class="btn btn-primary" href="home.jsp?sort=1" role="button">ホーム画面へ</a>
             </div>
         </div>
 

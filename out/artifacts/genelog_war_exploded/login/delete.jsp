@@ -59,7 +59,7 @@
   	    SQL.append("'");
 		del_count = stmt.executeUpdate(SQL.toString());
 		SQL = new StringBuffer();
-  	    SQL.append("alter table article_tbl auto_increment = 20");
+  	    SQL.append("alter table article_tbl auto_increment = 17");
 		del_count = stmt.executeUpdate(SQL.toString());
 
 	}	//tryブロック終了
